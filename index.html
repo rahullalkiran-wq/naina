@@ -266,7 +266,7 @@ section{position:relative;z-index:1;}
   font-family:'Playfair Display',serif;
   font-size:clamp(2rem,7vw,3.4rem);color:var(--ink);line-height:1.1;margin-bottom:0.5rem;
 }
-.s-sub{font-size:clamp(0.95rem,3vw,1.1rem);color:var(--muted);font-style:italic;line-height:1.7;}
+.s-sub{font-size:clamp(0.95rem,3vw,1.1rem);color:var(--muted);font-style:italic;line-height:1.7;max-width:500px;margin:0 auto;}
 .divider{position:relative;z-index:1;text-align:center;padding:1.2rem;font-size:0.9rem;letter-spacing:0.7em;color:rgba(232,84,122,0.2);}
 
 /* ══════════════════════════════════════════════════
@@ -403,21 +403,9 @@ section{position:relative;z-index:1;}
 }
 @keyframes tapPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
 
-/* Heart burst on tap */
-.heart-burst{
-  position:absolute;pointer-events:none;
-  animation:burstHeart 0.8s ease-out forwards;
-  font-size:1.2rem;
-}
-@keyframes burstHeart{
-  0%{opacity:1;transform:translate(-50%,-50%) scale(0);}
-  50%{opacity:1;transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1.2);}
-  100%{opacity:0;transform:translate(calc(-50% + var(--bx,0px)*2),calc(-50% + var(--by,-60px)*2)) scale(0.5);}
-}
-
 /* Scroll indicator */
 .hero-scroll{
-  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  position:absolute;bottom:2.5rem;left:0;right:0;
   display:flex;flex-direction:column;align-items:center;gap:0.4rem;
   opacity:0;animation:fadeSlideUp 1s ease 4s both;z-index:2;
 }
@@ -673,11 +661,9 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 </head>
 <body>
 
-<!-- Custom cursor -->
 <div id="cursor">💗</div>
 <div id="cursor-trail-wrap"></div>
 
-<!-- ═══ SPLASH ═══ -->
 <div id="splash">
   <div class="sp-glow"></div>
   <div class="sp-stars" id="sp-stars"></div>
@@ -695,7 +681,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   </div>
 </div>
 
-<!-- ═══ LOADER ═══ -->
 <div id="loader">
   <div class="ldr-bloom">🌸</div>
   <div class="ldr-name">Naina</div>
@@ -708,7 +693,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 <canvas id="heart-canvas"></canvas>
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<!-- ═══ LIGHTBOX ═══ -->
 <div id="lightbox">
   <button id="lb-close" onclick="closeLb()">✕</button>
   <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
@@ -725,7 +709,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   <div id="lb-caption"></div>
 </div>
 
-<!-- ═══ HERO ═══ -->
 <section id="hero">
   <div class="h-blob" style="width:350px;height:350px;top:-80px;right:-100px;background:rgba(232,84,122,0.12);--t:16s;--dx:28px;--dy:20px;"></div>
   <div class="h-blob" style="width:280px;height:280px;bottom:80px;left:-80px;background:rgba(232,84,122,0.1);--t:13s;--dx:-20px;--dy:24px;"></div>
@@ -734,13 +717,10 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
   <div class="hero-greeting">A very special surprise, just for you ✨</div>
 
-  <!-- "Happy Birthday" — each letter animates in -->
   <div class="hero-hb" id="hero-hb" aria-label="Happy Birthday"></div>
 
-  <!-- "Naina" — dramatic reveal -->
   <div class="hero-name-wrap">
     <div class="hero-name" id="hero-name">Naina</div>
-    <!-- Floating hearts around name -->
     <span class="name-heart" style="--d:2.5s;--s:1.1rem;top:-20px;left:10%;animation-delay:0.2s;">💕</span>
     <span class="name-heart" style="--d:3.1s;--s:0.9rem;top:-10px;right:12%;animation-delay:0.8s;">🌸</span>
     <span class="name-heart" style="--d:2.8s;--s:0.8rem;top:0px;left:22%;animation-delay:1.4s;">✨</span>
@@ -756,7 +736,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
     <span>🎂</span><span>3rd March · 2005 · Turning 21</span>
   </div>
 
-  <!-- Interactive tap-for-hearts -->
   <div class="hero-tap" id="hero-tap">
     <button class="tap-heart-btn" id="tap-btn" onclick="heartBurst(event)">💗</button>
     <div class="tap-hint">tap for love ↑</div>
@@ -770,7 +749,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ ABOUT ═══ -->
 <section id="about">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">About the birthday girl</div>
@@ -789,7 +767,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ TIMELINE ═══ -->
 <section id="timeline">
   <div class="tl-head fade-up">
     <div class="s-eyebrow">A journey through time</div>
@@ -809,7 +786,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ CHILDHOOD PHOTOS ═══ -->
 <section id="childhood-sec" class="photo-section childhood">
   <div class="section-header fade-up">
     <div class="s-eyebrow">Childhood &amp; Growing Up</div>
@@ -829,7 +805,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ RECENT PHOTOS ═══ -->
 <section id="recent-sec" class="photo-section recent">
   <div class="section-header fade-up">
     <div class="s-eyebrow">Recent Photos</div>
@@ -849,7 +824,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ REASONS ═══ -->
 <section id="reasons">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">From the heart</div>
@@ -871,7 +845,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ CAKE ═══ -->
 <section id="cake-section">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">Interactive surprise 🎉</div>
@@ -909,7 +882,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ MUSIC ═══ -->
 <div id="yt-player-wrap" style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;pointer-events:none;z-index:-1;overflow:hidden;">
   <div id="yt-player"></div>
 </div>
@@ -931,7 +903,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ PASSWORD ═══ -->
 <section id="pw-gate">
   <span class="lock-bounce fade-up">🔐</span>
   <div class="fade-up" style="text-align:center">
@@ -950,7 +921,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   </div>
 </section>
 
-<!-- ═══ OUR GALLERY ═══ -->
 <section id="our-gallery">
   <div style="text-align:center;margin-bottom:3rem">
     <div class="s-eyebrow">Just us two</div>
@@ -970,7 +940,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ LETTER ═══ -->
 <section id="letter">
   <div class="fade-up" style="text-align:center;margin-bottom:2.5rem;position:relative;z-index:1">
     <div class="s-eyebrow" style="color:rgba(255,255,255,0.35);background:none;border:none">Written from the heart</div>
@@ -996,7 +965,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ WISHES ═══ -->
 <section id="wishes">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">21 wishes for 21 years</div>
@@ -1021,7 +989,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ═══ COUNTDOWN ═══ -->
 <section id="countdown">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">Today you turn</div>
@@ -1037,7 +1004,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   <p class="fade-up" style="color:var(--muted);font-style:italic;font-size:0.82rem;margin-top:1rem;text-align:center">Until your next birthday 🎂</p>
 </section>
 
-<!-- ═══ FINALE ═══ -->
 <section id="finale">
   <div class="fin-eyebrow fade-up">The most special person in the world</div>
   <div class="fin-main fade-up">Happy Birthday</div>
@@ -1048,7 +1014,6 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <footer>Made with infinite love &amp; care · Just for Naina · 3rd March 2005 · Happy 21st Birthday 🌸</footer>
 
-<!-- YouTube IFrame API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
