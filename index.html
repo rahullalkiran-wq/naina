@@ -541,7 +541,7 @@ section { position:relative; z-index:1; }
 .cg:hover .cbody { opacity:0.85; }
 
 .flame {
-  transform-origin:50% 100%;
+  transform-origin:0px 0px; /* FIXED ORIGIN */
   animation:flick 0.35s ease-in-out infinite alternate;
 }
 @keyframes flick {
@@ -781,6 +781,26 @@ section { position:relative; z-index:1; }
   font-family:'Josefin Sans', sans-serif;
   font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
   color:rgba(255,255,255,0.3);
+  margin-bottom: 1rem;
+}
+/* Audio button styling */
+.play-music-btn {
+  background: rgba(232,84,122,0.15);
+  border: 1px solid var(--rose);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.play-music-btn:hover {
+  background: var(--rose);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(232,84,122,0.4);
 }
 .music-note {
   font-size:0.85rem; color:rgba(255,255,255,0.3);
@@ -886,25 +906,21 @@ footer {
 </head>
 <body>
 
-<!-- ── LOADER ── -->
 <div id="loader">
   <div class="ldr-ring"></div>
   <div class="ldr-name">Naina</div>
   <div class="ldr-txt">Preparing your surprise…</div>
 </div>
 
-<!-- ── FIXED ── -->
 <div id="prog" style="width:0%"></div>
 <canvas id="bg-canvas"></canvas>
 <canvas id="confetti-cv"></canvas>
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<!-- ── SETUP BANNER (hidden after script URL set) ── -->
 <div id="setup-banner">
   <span></span>
 </div>
 
-<!-- ── LIGHTBOX ── -->
 <div id="lightbox">
   <button id="lb-close" onclick="closeLb()">✕</button>
   <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
@@ -913,13 +929,7 @@ footer {
   <div id="lb-caption"></div>
 </div>
 
-<!-- ════════════════════════════════════════════════
-     S E C T I O N S
-════════════════════════════════════════════════ -->
-
-<!-- ① HERO -->
 <section id="hero">
-  <!-- decorative blobs -->
   <div class="hero-blob" style="width:300px;height:300px;top:-50px;right:-80px;--t:14s;--dx:25px;--dy:18px;"></div>
   <div class="hero-blob" style="width:250px;height:250px;bottom:60px;left:-60px;--t:11s;--dx:-18px;--dy:22px;"></div>
   <div class="hero-blob" style="width:180px;height:180px;top:40%;left:20%;--t:9s;--dx:12px;--dy:-15px;background:radial-gradient(circle,rgba(232,184,109,0.06) 0%,transparent 70%);"></div>
@@ -943,7 +953,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ② ABOUT -->
 <section id="about">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">About the birthday girl</div>
@@ -962,7 +971,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ③ TIMELINE -->
 <section id="timeline">
   <div class="tl-head fade-up">
     <div class="s-eyebrow">A journey through time</div>
@@ -982,7 +990,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ④ CHILDHOOD GALLERY — Auto-loads from Google Drive -->
 <section id="childhood-sec" class="photo-section childhood">
   <div class="section-header fade-up">
     <div class="s-eyebrow">Childhood &amp; Growing Up</div>
@@ -994,7 +1001,6 @@ footer {
       <span class="era-tag">🌷 Growing Up</span>
     </div>
   </div>
-  <!-- Photos injected here by JS -->
   <div class="photo-grid fade-up" id="childhood-grid">
     <div class="loading-state">
       <div class="loading-spinner"></div>
@@ -1006,7 +1012,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑤ RECENT GALLERY — Auto-loads from Google Drive -->
 <section id="recent-sec" class="photo-section recent">
   <div class="section-header fade-up">
     <div class="s-eyebrow">Recent Photos</div>
@@ -1029,7 +1034,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑥ REASONS -->
 <section id="reasons">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">From the heart</div>
@@ -1051,7 +1055,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑦ INTERACTIVE CAKE -->
 <section id="cake-section">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">Interactive surprise 🎉</div>
@@ -1064,28 +1067,23 @@ footer {
     <div id="wish-pop">🌟 Wish sent to the universe!</div>
 
     <svg class="cake-svg" viewBox="0 0 290 310" xmlns="http://www.w3.org/2000/svg">
-      <!-- shadow -->
       <ellipse cx="145" cy="295" rx="120" ry="10" fill="rgba(0,0,0,0.07)"/>
 
-      <!-- ── BOTTOM TIER ── -->
       <rect x="10" y="225" width="270" height="62" rx="14" fill="#f9a8c9"/>
       <rect x="10" y="225" width="270" height="18" rx="9" fill="#f48ab5"/>
       <path d="M10 225 Q23 213 36 225 Q49 213 62 225 Q75 213 88 225 Q101 213 114 225 Q127 213 140 225 Q153 213 166 225 Q179 213 192 225 Q205 213 218 225 Q231 213 244 225 Q257 213 270 225 L280 225 L10 225Z" fill="#fff5f9"/>
       <text x="145" y="262" text-anchor="middle" font-size="11" fill="rgba(192,48,96,0.45)" font-family="'Cormorant Garamond',serif" font-style="italic">♡ Happy Birthday Naina ♡</text>
 
-      <!-- ── MID TIER ── -->
       <rect x="36" y="168" width="218" height="60" rx="12" fill="#f7c5dc"/>
       <rect x="36" y="168" width="218" height="16" rx="8" fill="#f2a5c8"/>
       <path d="M36 168 Q48 157 60 168 Q72 157 84 168 Q96 157 108 168 Q120 157 132 168 Q144 157 156 168 Q168 157 180 168 Q192 157 204 168 Q216 157 228 168 Q240 157 252 168 L254 168 L36 168Z" fill="#fff5f9"/>
       <text x="145" y="202" text-anchor="middle" font-size="10" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">Naina 💕 21</text>
 
-      <!-- ── TOP TIER ── -->
       <rect x="68" y="118" width="154" height="53" rx="11" fill="#fce4ec"/>
       <rect x="68" y="118" width="154" height="15" rx="7" fill="#f9c2d4"/>
       <path d="M68 118 Q78 107 88 118 Q98 107 108 118 Q118 107 128 118 Q138 107 148 118 Q158 107 168 118 Q178 107 188 118 Q198 107 208 118 Q218 107 222 118 L222 118 L68 118Z" fill="#fff5f9"/>
       <text x="145" y="147" text-anchor="middle" font-size="9.5" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">With all my love</text>
 
-      <!-- decoration dots -->
       <circle cx="36"  cy="253" r="6" fill="#f7c948" opacity=".7"/>
       <circle cx="75"  cy="263" r="4" fill="#e8547a" opacity=".6"/>
       <circle cx="210" cy="258" r="5" fill="#a8d8f0" opacity=".7"/>
@@ -1093,76 +1091,72 @@ footer {
       <circle cx="56"  cy="192" r="4" fill="#e8547a" opacity=".55"/>
       <circle cx="232" cy="189" r="4" fill="#b8f0c8" opacity=".6"/>
 
-      <!-- ═══════════════════════════════
-           5 CANDLES — flame sits exactly on top of each candle rect
-           Candle top Y = candle y value
-           Flame translate = (candle-center-x, candle-top-y)
-      ═══════════════════════════════ -->
-
-      <!-- C1 — rose — top at y=88, center-x=95 -->
       <g class="cg" id="c1" onclick="blowC('c1',0)">
-        <!-- candle body -->
         <rect class="cbody" x="89" y="88" width="12" height="34" rx="4" fill="#e8547a"/>
-        <!-- wick -->
         <line x1="95" y1="88" x2="95" y2="83" stroke="#3a2020" stroke-width="1.5"/>
-        <!-- flame — positioned at wick tip (95, 83) -->
-        <g class="flame" transform="translate(95,83)">
-          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+        <g transform="translate(95,83)">
+          <g class="flame">
+            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+          </g>
         </g>
         <path class="smoke" d="M95,82 C95,74 90,71 95,63 C100,55 95,51 95,43"/>
       </g>
 
-      <!-- C2 — gold — top at y=80, center-x=118 -->
       <g class="cg" id="c2" onclick="blowC('c2',1)">
         <rect class="cbody" x="112" y="80" width="12" height="42" rx="4" fill="#e8b86d"/>
         <line x1="118" y1="80" x2="118" y2="75" stroke="#3a2020" stroke-width="1.5"/>
-        <g class="flame" transform="translate(118,75)">
-          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+        <g transform="translate(118,75)">
+          <g class="flame">
+            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+          </g>
         </g>
         <path class="smoke" d="M118,74 C118,66 113,63 118,55 C123,47 118,43 118,35"/>
       </g>
 
-      <!-- C3 — sky blue — TALLEST — top at y=70, center-x=144 -->
       <g class="cg" id="c3" onclick="blowC('c3',2)">
         <rect class="cbody" x="138" y="70" width="12" height="52" rx="4" fill="#7ec8e3"/>
         <line x1="144" y1="70" x2="144" y2="64" stroke="#3a2020" stroke-width="1.5"/>
-        <g class="flame" transform="translate(144,64)">
-          <ellipse cx="0" cy="-14" rx="9"  ry="16" fill="#ff8c00" opacity="0.55"/>
-          <ellipse cx="0" cy="-13" rx="7"  ry="13" fill="#ffbf00"/>
-          <ellipse cx="0" cy="-13" rx="4"  ry="8.5" fill="#fff176"/>
-          <ellipse cx="0" cy="-18" rx="2.5" ry="5"  fill="#ffffff"/>
+        <g transform="translate(144,64)">
+          <g class="flame">
+            <ellipse cx="0" cy="-14" rx="9"  ry="16" fill="#ff8c00" opacity="0.55"/>
+            <ellipse cx="0" cy="-13" rx="7"  ry="13" fill="#ffbf00"/>
+            <ellipse cx="0" cy="-13" rx="4"  ry="8.5" fill="#fff176"/>
+            <ellipse cx="0" cy="-18" rx="2.5" ry="5"  fill="#ffffff"/>
+          </g>
         </g>
         <path class="smoke" d="M144,63 C144,55 139,52 144,44 C149,36 144,32 144,24"/>
       </g>
 
-      <!-- C4 — mint — top at y=80, center-x=171 -->
       <g class="cg" id="c4" onclick="blowC('c4',3)">
         <rect class="cbody" x="165" y="80" width="12" height="42" rx="4" fill="#88d8b0"/>
         <line x1="171" y1="80" x2="171" y2="75" stroke="#3a2020" stroke-width="1.5"/>
-        <g class="flame" transform="translate(171,75)">
-          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+        <g transform="translate(171,75)">
+          <g class="flame">
+            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+          </g>
         </g>
         <path class="smoke" d="M171,74 C171,66 166,63 171,55 C176,47 171,43 171,35"/>
       </g>
 
-      <!-- C5 — lavender — top at y=88, center-x=194 -->
       <g class="cg" id="c5" onclick="blowC('c5',4)">
         <rect class="cbody" x="188" y="88" width="12" height="34" rx="4" fill="#c9b1f5"/>
         <line x1="194" y1="88" x2="194" y2="83" stroke="#3a2020" stroke-width="1.5"/>
-        <g class="flame" transform="translate(194,83)">
-          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+        <g transform="translate(194,83)">
+          <g class="flame">
+            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
+          </g>
         </g>
         <path class="smoke" d="M194,82 C194,74 189,71 194,63 C199,55 194,51 194,43"/>
       </g>
@@ -1176,7 +1170,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑧ MUSIC -->
 <section id="music">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow" style="color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0);background:none">Playing for you</div>
@@ -1185,15 +1178,16 @@ footer {
   </div>
   <div class="music-wrap fade-up">
     <div class="wave-row" id="wrow"></div>
-    <div class="song-name">Tum Hi Ho</div>
-    <div class="song-by">Arijit Singh · Our Forever Song</div>
+    <div class="song-name">Shab Tum Ho</div>
+    <div class="song-by">Darshan Raval · Our Forever Song</div>
+    
+    <button class="play-music-btn" id="music-btn" onclick="toggleMusic()">▶ Play Music</button>
   </div>
   <p class="music-note fade-up">🎧 Play it while you scroll through our memories below</p>
 </section>
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑨ PASSWORD GATE -->
 <section id="pw-gate">
   <span class="lock-bounce fade-up">🔐</span>
   <div class="fade-up" style="text-align:center">
@@ -1212,7 +1206,6 @@ footer {
   </div>
 </section>
 
-<!-- ⑩ OUR GALLERY (locked, loads from Google Drive when unlocked) -->
 <section id="our-gallery">
   <div style="text-align:center;margin-bottom:3rem">
     <div class="s-eyebrow">Just us two</div>
@@ -1235,7 +1228,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑪ LOVE LETTER -->
 <section id="letter">
   <div class="fade-up" style="text-align:center;margin-bottom:2.5rem;position:relative;z-index:1">
     <div class="s-eyebrow" style="color:rgba(255,255,255,0.4);border-color:transparent;background:none">Written from the heart</div>
@@ -1261,7 +1253,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑫ WISHES -->
 <section id="wishes">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">21 wishes for 21 years</div>
@@ -1286,7 +1277,6 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ⑬ COUNTDOWN -->
 <section id="countdown">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow">Today you turn</div>
@@ -1302,7 +1292,6 @@ footer {
   <p class="fade-up" style="color:var(--muted);font-style:italic;font-size:0.82rem;margin-top:1rem;text-align:center">Until your next birthday 🎂</p>
 </section>
 
-<!-- ⑭ FINALE -->
 <section id="finale">
   <div class="fin-eyebrow fade-up">The most special person in the world</div>
   <div class="fin-main fade-up">Happy Birthday</div>
@@ -1317,9 +1306,10 @@ footer {
 
 <footer>Made with infinite love &amp; care · Just for Naina · 3rd March 2005 · Happy 21st Birthday 🌸</footer>
 
-<!-- ══════════════════════════════════════════════
-     J A V A S C R I P T
-══════════════════════════════════════════════ -->
+<audio id="bg-audio" loop>
+  <source src="YOUR_MP3_LINK_HERE.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 // ════════════════════════════════════════════════════════════
 //  ★  PASTE YOUR GOOGLE APPS SCRIPT URL HERE  ★
@@ -1526,6 +1516,24 @@ document.addEventListener('keydown', function(e) {
   else if (e.key === 'ArrowRight') lbNav(1);
   else if (e.key === 'Escape') closeLb();
 });
+
+// ════════════════════════════════════════════════════════════
+//  MUSIC PLAYER TOGGLE
+// ════════════════════════════════════════════════════════════
+function toggleMusic() {
+  var audio = document.getElementById('bg-audio');
+  var btn = document.getElementById('music-btn');
+  
+  if (audio.paused) {
+    audio.play();
+    btn.innerHTML = '⏸ Pause Music';
+    btn.style.background = 'var(--rose)';
+  } else {
+    audio.pause();
+    btn.innerHTML = '▶ Play Music';
+    btn.style.background = 'rgba(232,84,122,0.15)';
+  }
+}
 
 // ════════════════════════════════════════════════════════════
 //  CANDLE INTERACTION
