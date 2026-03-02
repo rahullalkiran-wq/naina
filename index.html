@@ -118,16 +118,27 @@ body{
   display:flex;flex-direction:column;align-items:center;gap:0.6rem;
   padding:2rem 1.5rem;
 }
-.sp-rose{
-  font-size:3.5rem;
-  animation:spRosePulse 2s ease-in-out infinite;
-  filter:drop-shadow(0 0 20px rgba(232,84,122,0.8));
-  display:block;margin-bottom:0.5rem;
+.sp-rings{
+  position:relative;width:90px;height:90px;margin:0 auto 0.8rem;
+  display:flex;align-items:center;justify-content:center;
 }
-@keyframes spRosePulse{
-  0%,100%{transform:scale(1) rotate(-5deg);filter:drop-shadow(0 0 20px rgba(232,84,122,0.6));}
-  50%{transform:scale(1.15) rotate(5deg);filter:drop-shadow(0 0 40px rgba(232,84,122,1));}
+.sp-ring{
+  position:absolute;border-radius:50%;border:1.5px solid rgba(232,84,122,0.5);
+  animation:spRingPulse 2.2s ease-in-out infinite;
 }
+.sp-ring:nth-child(1){width:90px;height:90px;animation-delay:0s;border-color:rgba(232,84,122,0.55);}
+.sp-ring:nth-child(2){width:66px;height:66px;animation-delay:0.35s;border-color:rgba(232,84,122,0.4);}
+.sp-ring:nth-child(3){width:44px;height:44px;animation-delay:0.7s;border-color:rgba(232,84,122,0.3);}
+@keyframes spRingPulse{
+  0%,100%{transform:scale(1);opacity:0.5;}
+  50%{transform:scale(1.08);opacity:1;box-shadow:0 0 24px rgba(232,84,122,0.5);}
+}
+.sp-rings-inner{
+  position:relative;z-index:2;font-size:1.8rem;
+  animation:spInnerPulse 1.8s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 12px rgba(232,84,122,0.9));
+}
+@keyframes spInnerPulse{from{transform:scale(0.9);}to{transform:scale(1.12);}}
 .sp-for{
   font-family:'Josefin Sans',sans-serif;font-size:0.65rem;
   letter-spacing:0.4em;text-transform:uppercase;
@@ -420,6 +431,7 @@ section{position:relative;z-index:1;}
   position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:0.4rem;
   opacity:0;animation:fadeSlideUp 1s ease 4s both;z-index:2;
+  text-align:center;white-space:nowrap;
 }
 .scroll-rod{
   width:1.5px;height:50px;
@@ -669,6 +681,341 @@ section{position:relative;z-index:1;}
    FOOTER
 ══════════════════════════════════════════════════ */
 footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-align:center;padding:2rem 1.5rem;font-family:'Josefin Sans',sans-serif;font-size:0.66rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.12);}
+
+/* ══════════════════════════════════════════════════
+   TYPEWRITER LOVE NOTE
+══════════════════════════════════════════════════ */
+#typewriter-sec{
+  padding:5.5rem 1.5rem;
+  background:linear-gradient(160deg,#0d0208 0%,#1a0512 50%,#0a0110 100%);
+  text-align:center;overflow:hidden;position:relative;
+}
+#typewriter-sec::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(232,84,122,0.12) 0%,transparent 70%);
+}
+.tw-label{
+  font-family:'Josefin Sans',sans-serif;font-size:0.62rem;letter-spacing:0.35em;
+  text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:2rem;
+  position:relative;z-index:1;
+}
+.tw-card{
+  max-width:340px;margin:0 auto;position:relative;z-index:1;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(232,84,122,0.18);
+  border-radius:2rem;padding:2.5rem 2rem;
+}
+.tw-to{
+  font-family:'Josefin Sans',sans-serif;font-size:0.6rem;letter-spacing:0.28em;
+  text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:0.8rem;
+}
+.tw-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(1.2rem,4.5vw,1.45rem);color:rgba(255,255,255,0.88);
+  line-height:2;min-height:6rem;
+}
+.tw-cursor{
+  display:inline-block;width:2px;height:1.1em;
+  background:var(--rose);margin-left:2px;vertical-align:text-bottom;
+  animation:cursorBlink 0.75s step-end infinite;
+}
+@keyframes cursorBlink{0%,100%{opacity:1;}50%{opacity:0;}}
+.tw-from{
+  font-family:'Pinyon Script',cursive;font-size:2.4rem;color:var(--rose);
+  margin-top:1.2rem;text-align:right;
+}
+
+/* ══════════════════════════════════════════════════
+   SCRATCH CARD
+══════════════════════════════════════════════════ */
+#scratch-sec{
+  padding:5.5rem 1.5rem;
+  background:linear-gradient(135deg,#fff8f2,#fdf0ff 100%);
+  text-align:center;
+}
+.scratch-wrap{
+  width:280px;height:170px;position:relative;margin:2.5rem auto 1rem;
+  border-radius:1.6rem;overflow:hidden;
+  box-shadow:0 12px 40px rgba(232,84,122,0.25);
+}
+#scratch-canvas{position:absolute;inset:0;z-index:2;border-radius:1.6rem;}
+.scratch-reveal{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(135deg,#fff0f8,#fff5e8);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;
+  border-radius:1.6rem;
+}
+.scratch-msg{
+  font-family:'Pinyon Script',cursive;font-size:2.4rem;color:var(--rose);
+  line-height:1.2;padding:0 1rem;text-align:center;
+}
+.scratch-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.9rem;color:var(--muted);
+}
+.scratch-hint{
+  font-family:'Josefin Sans',sans-serif;font-size:0.7rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--rose);
+  animation:breathe 2s ease-in-out infinite;margin-top:0.5rem;
+}
+.scratch-done{
+  font-family:'Josefin Sans',sans-serif;font-size:0.7rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(232,84,122,0.5);margin-top:0.5rem;
+  opacity:0;transition:opacity 0.6s ease;
+}
+.scratch-done.show{opacity:1;}
+
+/* ══════════════════════════════════════════════════
+   PISCES STAR CARD
+══════════════════════════════════════════════════ */
+#star-sec{
+  padding:5.5rem 1.5rem;
+  background:linear-gradient(160deg,#0a0216 0%,#160828 60%,#070114 100%);
+  text-align:center;position:relative;overflow:hidden;
+}
+.star-bg-canvas{position:absolute;inset:0;z-index:0;pointer-events:none;}
+.star-card{
+  max-width:340px;margin:0 auto;position:relative;z-index:2;
+  background:linear-gradient(160deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));
+  border:1px solid rgba(160,120,220,0.3);border-radius:2.5rem;
+  padding:2.5rem 2rem;
+  box-shadow:0 0 60px rgba(160,100,240,0.12),inset 0 0 40px rgba(120,80,200,0.05);
+  backdrop-filter:blur(4px);
+}
+.star-sign{
+  font-size:3.5rem;margin-bottom:0.5rem;display:block;
+  filter:drop-shadow(0 0 20px rgba(180,120,255,0.8));
+  animation:starFloat 3s ease-in-out infinite alternate;
+}
+@keyframes starFloat{from{transform:translateY(0) rotate(-3deg);}to{transform:translateY(-10px) rotate(3deg);}}
+.star-name{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:1.9rem;color:rgba(220,190,255,0.95);margin-bottom:0.3rem;
+}
+.star-dates{
+  font-family:'Josefin Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:rgba(180,140,255,0.4);margin-bottom:1.5rem;
+}
+.star-trait{
+  display:flex;align-items:center;gap:0.8rem;margin-bottom:0.9rem;
+  background:rgba(255,255,255,0.04);border-radius:1rem;padding:0.75rem 1rem;
+  border:1px solid rgba(160,120,220,0.12);text-align:left;
+}
+.star-trait-ico{font-size:1.3rem;flex-shrink:0;}
+.star-trait-lbl{font-family:'Josefin Sans',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(180,140,255,0.45);display:block;}
+.star-trait-val{font-size:0.88rem;color:rgba(220,190,255,0.85);margin-top:0.1rem;font-style:italic;}
+.star-msg{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:rgba(220,190,255,0.55);line-height:1.8;
+  margin-top:1.4rem;border-top:1px solid rgba(160,120,220,0.15);padding-top:1.2rem;
+}
+
+/* ══════════════════════════════════════════════════
+   MEMORY POLAROID WALL
+══════════════════════════════════════════════════ */
+#polaroid-sec{
+  padding:5.5rem 1rem;
+  background:linear-gradient(160deg,#fdf5f0,#fef0f8 100%);
+  text-align:center;overflow:hidden;
+}
+.polaroid-wall{
+  display:flex;gap:1rem;overflow-x:auto;
+  padding:2rem 1.5rem 3rem;
+  max-width:100%;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+.polaroid-wall::-webkit-scrollbar{height:4px;}
+.polaroid-wall::-webkit-scrollbar-track{background:rgba(232,84,122,0.05);}
+.polaroid-wall::-webkit-scrollbar-thumb{background:rgba(232,84,122,0.3);border-radius:4px;}
+.polaroid{
+  flex-shrink:0;width:170px;
+  background:#fff;padding:0.9rem 0.9rem 2.8rem;
+  box-shadow:0 8px 28px rgba(0,0,0,0.12),0 2px 6px rgba(0,0,0,0.06);
+  border-radius:4px;
+  scroll-snap-align:center;
+  transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.4s;
+  position:relative;
+}
+.polaroid:nth-child(odd){transform:rotate(-2.5deg);}
+.polaroid:nth-child(even){transform:rotate(2deg);}
+.polaroid:hover,.polaroid:active{
+  transform:scale(1.08) rotate(0deg) translateY(-8px)!important;
+  box-shadow:0 24px 50px rgba(0,0,0,0.22);z-index:10;
+}
+.polaroid-img{
+  width:100%;height:130px;object-fit:cover;
+  background:linear-gradient(135deg,#fce8f0,#ffe8d6);
+  display:block;border-radius:2px;
+}
+.polaroid-caption{
+  position:absolute;bottom:0.7rem;left:0;right:0;text-align:center;
+  font-family:'Pinyon Script',cursive;font-size:1.05rem;color:rgba(74,20,48,0.6);
+  padding:0 0.5rem;
+}
+.polaroid-emoji{
+  position:absolute;top:-14px;right:-10px;font-size:1.4rem;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  animation:stickerWig 3s ease-in-out infinite;
+}
+@keyframes stickerWig{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
+.scroll-hint{
+  font-family:'Josefin Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--muted);margin-top:0.5rem;
+  display:flex;align-items:center;justify-content:center;gap:0.5rem;
+}
+.scroll-hint::before,.scroll-hint::after{content:'';width:20px;height:1px;background:var(--rose);opacity:0.3;}
+
+/* ══════════════════════════════════════════════════
+   21 THINGS WE'VE DONE TOGETHER — Checklist
+══════════════════════════════════════════════════ */
+#checklist-sec{
+  padding:5.5rem 1.5rem;
+  background:#fff;text-align:center;
+}
+.checklist{max-width:360px;margin:2.5rem auto 0;}
+.cl-item{
+  display:flex;align-items:center;gap:0.9rem;
+  padding:0.85rem 1rem;border-radius:1rem;margin-bottom:0.5rem;
+  background:var(--cream);border:1px solid rgba(232,84,122,0.08);
+  transition:all 0.3s ease;text-align:left;
+  cursor:pointer!important;
+}
+.cl-item.checked{
+  background:linear-gradient(135deg,rgba(232,84,122,0.08),rgba(232,84,122,0.04));
+  border-color:rgba(232,84,122,0.25);
+}
+.cl-item:hover{transform:translateX(4px);}
+.cl-box{
+  width:22px;height:22px;border-radius:6px;border:2px solid rgba(232,84,122,0.3);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  background:#fff;
+}
+.cl-item.checked .cl-box{
+  background:var(--rose);border-color:var(--rose);
+  color:#fff;transform:scale(1.15);
+}
+.cl-text{font-size:0.88rem;color:var(--ink);font-style:italic;}
+.cl-item.checked .cl-text{text-decoration:line-through;color:var(--muted);}
+.cl-progress{
+  max-width:360px;margin:1.5rem auto 0;height:6px;
+  background:rgba(232,84,122,0.1);border-radius:50px;overflow:hidden;
+}
+.cl-bar{
+  height:100%;border-radius:50px;width:0%;
+  background:linear-gradient(90deg,var(--rose),var(--gold));
+  transition:width 0.6s ease;
+}
+.cl-score{
+  font-family:'Josefin Sans',sans-serif;font-size:0.7rem;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--muted);margin-top:0.8rem;
+}
+
+/* ══════════════════════════════════════════════════
+   BALLOON FLOAT SECTION
+══════════════════════════════════════════════════ */
+#balloons-sec{
+  padding:5.5rem 1.5rem 4rem;
+  background:linear-gradient(160deg,#fff0fa,#fff8e8 100%);
+  text-align:center;position:relative;overflow:hidden;
+  min-height:400px;
+}
+.balloon-field{
+  position:relative;height:300px;max-width:380px;
+  margin:2rem auto 0;
+}
+.balloon{
+  position:absolute;bottom:0;
+  display:flex;flex-direction:column;align-items:center;
+  animation:balloonFloat var(--dur,4s) ease-in-out infinite alternate;
+  cursor:pointer!important;
+  transition:transform 0.15s;
+}
+.balloon:active{transform:scale(0.9)!important;}
+@keyframes balloonFloat{
+  from{transform:translateY(0) rotate(var(--rot,0deg));}
+  to{transform:translateY(-40px) rotate(calc(var(--rot,0deg) * -1));}
+}
+.balloon-body{
+  width:50px;height:62px;border-radius:50%;
+  background:var(--bc,#e8547a);
+  box-shadow:inset -8px -8px 16px rgba(0,0,0,0.18),inset 4px 4px 10px rgba(255,255,255,0.35);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Josefin Sans',sans-serif;font-size:0.62rem;letter-spacing:0.05em;
+  color:rgba(255,255,255,0.9);text-align:center;padding:0.3rem;
+  position:relative;
+}
+.balloon-body::after{
+  content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+  width:0;height:0;
+  border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:8px solid var(--bc,#e8547a);
+}
+.balloon-string{
+  width:1px;height:55px;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.2),transparent);
+  margin-top:0;
+}
+.balloon-pop{
+  position:absolute;pointer-events:none;z-index:10;
+  animation:popAnim 0.6s ease-out forwards;
+  font-size:1.8rem;transform:translate(-50%,-50%);
+}
+@keyframes popAnim{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(0);}
+  50%{opacity:1;transform:translate(-50%,-50%) scale(1.5);}
+  100%{opacity:0;transform:translate(-50%,-150%) scale(0.5);}
+}
+.balloons-msg{
+  font-family:'Pinyon Script',cursive;font-size:3rem;color:var(--rose);
+  margin-top:1.5rem;opacity:0;transform:translateY(20px);
+  transition:all 0.9s ease;
+}
+.balloons-msg.show{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════════════════
+   AUDIO VISUALIZER QUOTE
+══════════════════════════════════════════════════ */
+#quote-sec{
+  padding:5rem 1.5rem;
+  background:var(--ink);
+  text-align:center;position:relative;overflow:hidden;
+}
+#quote-sec::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 60%,rgba(232,84,122,0.12) 0%,transparent 60%),
+              radial-gradient(ellipse at 70% 40%,rgba(232,184,109,0.07) 0%,transparent 55%);
+}
+.quote-text{
+  position:relative;z-index:1;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(1.4rem,5.5vw,2rem);color:rgba(255,255,255,0.88);
+  line-height:1.8;max-width:340px;margin:0 auto 1.5rem;
+}
+.quote-text::before{
+  content:'"';font-family:'Pinyon Script',cursive;font-size:5rem;
+  color:rgba(232,84,122,0.25);line-height:0;position:relative;top:1.8rem;margin-right:0.2rem;
+}
+.quote-author{
+  font-family:'Josefin Sans',sans-serif;font-size:0.68rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:rgba(255,255,255,0.2);
+  position:relative;z-index:1;
+}
+.quote-nav{display:flex;justify-content:center;gap:0.6rem;margin-top:2rem;position:relative;z-index:1;}
+.q-dot{
+  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);
+  transition:background 0.3s,transform 0.3s;
+}
+.q-dot.on{background:var(--rose);transform:scale(1.4);}
+
+/* ══════════════════════════════════════════════════
+   SECTION TRANSITIONS — extra glow dividers
+══════════════════════════════════════════════════ */
+.glow-divider{
+  height:2px;max-width:200px;margin:0 auto;
+  background:linear-gradient(90deg,transparent,var(--rose),transparent);
+  opacity:0.35;
+}
 </style>
 </head>
 <body>
@@ -683,7 +1030,12 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   <div class="sp-stars" id="sp-stars"></div>
   <div class="sp-petals" id="sp-petals"></div>
   <div class="sp-content">
-    <span class="sp-rose">🌹</span>
+    <div class="sp-rings">
+      <div class="sp-ring"></div>
+      <div class="sp-ring"></div>
+      <div class="sp-ring"></div>
+      <span class="sp-rings-inner">💗</span>
+    </div>
     <div class="sp-for">A very special surprise, just for</div>
     <div class="sp-name">Naina</div>
     <div class="sp-date">3rd March, 2005 · Turning 21 🎂</div>
@@ -871,6 +1223,200 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
 
 <div class="divider">✦ ✦ ✦</div>
 
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ TYPEWRITER LOVE NOTE ═══ -->
+<section id="typewriter-sec">
+  <div class="tw-label fade-up">A message, letter by letter, just for you</div>
+  <div class="tw-card fade-up">
+    <div class="tw-to">To: Naina, my forever person</div>
+    <div class="tw-text" id="tw-text"><span class="tw-cursor"></span></div>
+    <div class="tw-from">— Yours, always 💕</div>
+  </div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ SCRATCH CARD ═══ -->
+<section id="scratch-sec">
+  <div class="fade-up" style="text-align:center">
+    <div class="s-eyebrow">Scratch to reveal 🎁</div>
+    <h2 class="s-title">Your Secret Surprise 🤫</h2>
+    <p class="s-sub">Use your finger to scratch and reveal what's hidden inside…</p>
+  </div>
+  <div class="scratch-wrap fade-up">
+    <canvas id="scratch-canvas"></canvas>
+    <div class="scratch-reveal">
+      <div class="scratch-msg">You are my whole world 💖</div>
+      <div class="scratch-sub">& my greatest adventure</div>
+    </div>
+  </div>
+  <div class="scratch-hint fade-up">👆 scratch here</div>
+  <div class="scratch-done" id="scratch-done">✨ Fully revealed!</div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ POLAROID MEMORY WALL ═══ -->
+<section id="polaroid-sec">
+  <div class="fade-up" style="text-align:center">
+    <div class="s-eyebrow">Our little moments</div>
+    <h2 class="s-title">Memory Wall 📸</h2>
+    <p class="s-sub">Swipe through our favourite moments together</p>
+  </div>
+  <div class="polaroid-wall" id="polaroid-wall">
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#fce8f0,#ffe4f5);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🌸</div>
+      <div class="polaroid-emoji">💕</div>
+      <div class="polaroid-caption">First day</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#e8f4ff,#d4eaff);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🌊</div>
+      <div class="polaroid-emoji">✨</div>
+      <div class="polaroid-caption">Adventures</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#fff8e8,#ffefcc);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🌅</div>
+      <div class="polaroid-emoji">🌟</div>
+      <div class="polaroid-caption">Golden hours</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#f0ffe8,#ddffd0);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🌿</div>
+      <div class="polaroid-emoji">🍀</div>
+      <div class="polaroid-caption">Our walks</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#fff0f8,#ffe0f5);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎶</div>
+      <div class="polaroid-emoji">💖</div>
+      <div class="polaroid-caption">Our songs</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#f5e8ff,#e8d8ff);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🌙</div>
+      <div class="polaroid-emoji">⭐</div>
+      <div class="polaroid-caption">Late nights</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#ffe8e8,#ffd0d0);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🍕</div>
+      <div class="polaroid-emoji">😄</div>
+      <div class="polaroid-caption">Food dates</div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img" style="background:linear-gradient(135deg,#e8fff8,#d0fff0);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎉</div>
+      <div class="polaroid-emoji">🥂</div>
+      <div class="polaroid-caption">Celebrations</div>
+    </div>
+  </div>
+  <div class="scroll-hint fade-up">← swipe to explore →</div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ PISCES STAR CARD ═══ -->
+<section id="star-sec">
+  <canvas class="star-bg-canvas" id="star-canvas"></canvas>
+  <div class="fade-up" style="text-align:center;position:relative;z-index:2;margin-bottom:2.5rem">
+    <div class="s-eyebrow" style="color:rgba(200,160,255,0.5);background:none;border:none;">Written in the stars</div>
+    <h2 class="s-title" style="color:rgba(220,190,255,0.9)">Your Star Sign ♓</h2>
+    <p class="s-sub" style="color:rgba(200,160,255,0.4)">The universe had you planned all along</p>
+  </div>
+  <div class="star-card fade-up">
+    <span class="star-sign">♓</span>
+    <div class="star-name">Pisces</div>
+    <div class="star-dates">Feb 19 – Mar 20 · Born Under Neptune</div>
+    <div class="star-trait">
+      <span class="star-trait-ico">💜</span>
+      <div>
+        <span class="star-trait-lbl">Soul</span>
+        <div class="star-trait-val">Deeply empathetic, intuitive, endlessly loving</div>
+      </div>
+    </div>
+    <div class="star-trait">
+      <span class="star-trait-ico">🌊</span>
+      <div>
+        <span class="star-trait-lbl">Element</span>
+        <div class="star-trait-val">Water — fluid, deep, and powerfully moving</div>
+      </div>
+    </div>
+    <div class="star-trait">
+      <span class="star-trait-ico">✨</span>
+      <div>
+        <span class="star-trait-lbl">Gift</span>
+        <div class="star-trait-val">Making everyone around her feel truly seen</div>
+      </div>
+    </div>
+    <div class="star-trait">
+      <span class="star-trait-ico">💫</span>
+      <div>
+        <span class="star-trait-lbl">2026 Cosmic Note</span>
+        <div class="star-trait-val">Your 21st year is bathed in Neptune's magic — trust the journey</div>
+      </div>
+    </div>
+    <div class="star-msg">
+      "Pisces are old souls in young hearts. They carry the ocean inside them — always giving, always feeling, always deeply, beautifully real."
+    </div>
+  </div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ 21 THINGS CHECKLIST ═══ -->
+<section id="checklist-sec">
+  <div class="fade-up" style="text-align:center">
+    <div class="s-eyebrow">Memories we've made</div>
+    <h2 class="s-title">21 Things We've Done 💛</h2>
+    <p class="s-sub">Tap each memory to relive it 💕</p>
+  </div>
+  <div class="checklist fade-up" id="checklist">
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Stayed up talking till 4am 🌙</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Shared food we said we wouldn't share 🍕</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Laughed until we cried 😂</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Got lost together and didn't care 🗺️</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Watched the same movie twice in one night 🎬</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Sang along to our songs at full volume 🎵</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Took a hundred photos in one outing 📸</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Made plans so big they scared us ✈️</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Texted each other while sitting next to each other 📱</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Cried together and felt better after 💧</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Argued about something ridiculous & laughed after 🙃</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Stayed silent together and it felt peaceful 🌿</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Found our favourite place and called it ours 🏡</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Ordered dessert even though we said we wouldn't 🍰</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Sent voice notes longer than 5 minutes 🎙️</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Defended each other without question 🛡️</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Celebrated small wins like they were huge 🎉</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Watched the sunrise (accidentally) 🌅</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Made inside jokes nobody else would understand 😏</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Told each other "I'm fine" and then talked for 2 hours 💬</div></div>
+    <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-box"></div><div class="cl-text">Said "see you soon" and meant forever 💕</div></div>
+  </div>
+  <div class="cl-progress fade-up"><div class="cl-bar" id="cl-bar"></div></div>
+  <div class="cl-score fade-up" id="cl-score">0 / 21 memories relived</div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ BALLOON SECTION ═══ -->
+<section id="balloons-sec">
+  <div class="fade-up" style="text-align:center">
+    <div class="s-eyebrow">Pop them all 🎈</div>
+    <h2 class="s-title">21 Balloons for 21 Years</h2>
+    <p class="s-sub">Each balloon holds a birthday wish — tap to pop! 🎉</p>
+  </div>
+  <div class="balloon-field" id="balloon-field"></div>
+  <div class="balloons-msg" id="balloons-msg">All wishes released! 🎊</div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<!-- ═══ ROTATING QUOTES ═══ -->
+<section id="quote-sec">
+  <div class="quote-text fade-up" id="quote-text">You are braver than you believe, stronger than you seem, and loved more than you'll ever know.</div>
+  <div class="quote-author fade-up" id="quote-author">— Written for Naina</div>
+  <div class="quote-nav fade-up" id="quote-nav"></div>
+</section>
+
+<div class="divider">✦ ✦ ✦</div>
 <!-- ═══ CAKE ═══ -->
 <section id="cake-section">
   <div class="fade-up" style="text-align:center">
@@ -1534,6 +2080,240 @@ function confetti(){
   }
   draw();
 }
+
+// ═══════════════════════════════════════════════════════════
+//  TYPEWRITER LOVE NOTE
+// ═══════════════════════════════════════════════════════════
+(function(){
+  var messages=[
+    "Happy Birthday, Naina. 🎂 Today the whole world celebrates the most extraordinary person I've ever known.",
+    "You have this rare gift of making everyone feel deeply, genuinely loved. I hope you feel that today — tenfold. 💕",
+    "21 years ago, the universe made its best decision. I'm so lucky to be part of your story. 🌸",
+    "You are not just beautiful on the outside. Your soul glows. Your kindness echoes. Your laugh heals. 💫",
+    "Here's to Chapter 21 — your most radiant, adventurous, breathtaking chapter yet. I'll be right here. 🥂"
+  ];
+  var msgIdx=0, charIdx=0, el=document.getElementById('tw-text'), typing=true, paused=false;
+  if(!el)return;
+
+  function tick(){
+    if(!el.isConnected)return;
+    if(paused){setTimeout(tick,2200);paused=false;return;}
+    if(typing){
+      if(charIdx<=messages[msgIdx].length){
+        el.innerHTML=messages[msgIdx].slice(0,charIdx)+'<span class="tw-cursor"></span>';
+        charIdx++;
+        setTimeout(tick, charIdx===messages[msgIdx].length?60:28+Math.random()*28);
+      }else{paused=true;typing=false;setTimeout(tick,3500);}
+    }else{
+      if(charIdx>0){
+        charIdx--;
+        el.innerHTML=messages[msgIdx].slice(0,charIdx)+'<span class="tw-cursor"></span>';
+        setTimeout(tick,12);
+      }else{
+        msgIdx=(msgIdx+1)%messages.length;
+        typing=true;setTimeout(tick,400);
+      }
+    }
+  }
+
+  // Start when section is visible
+  var twObs=new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){twObs.disconnect();setTimeout(tick,800);}
+  },{threshold:0.4});
+  twObs.observe(document.getElementById('typewriter-sec'));
+})();
+
+// ═══════════════════════════════════════════════════════════
+//  SCRATCH CARD
+// ═══════════════════════════════════════════════════════════
+(function(){
+  var cv=document.getElementById('scratch-canvas');
+  if(!cv)return;
+  var wrap=cv.parentElement;
+  cv.width=wrap.offsetWidth||280;
+  cv.height=wrap.offsetHeight||170;
+  var ctx=cv.getContext('2d');
+  var isDrawing=false, scratched=0, total=cv.width*cv.height, revealed=false;
+
+  // Draw scratch surface
+  var g=ctx.createLinearGradient(0,0,cv.width,cv.height);
+  g.addColorStop(0,'#c03060');g.addColorStop(0.5,'#e8547a');g.addColorStop(1,'#c4922a');
+  ctx.fillStyle=g;ctx.fillRect(0,0,cv.width,cv.height);
+
+  // Instruction text on surface
+  ctx.fillStyle='rgba(255,255,255,0.7)';
+  ctx.font='bold 14px "Josefin Sans", sans-serif';
+  ctx.textAlign='center';ctx.letterSpacing='3px';
+  ctx.fillText('SCRATCH HERE', cv.width/2, cv.height/2-8);
+  ctx.font='22px serif';
+  ctx.fillText('🎁', cv.width/2, cv.height/2+22);
+
+  function getPos(e){
+    var r=cv.getBoundingClientRect();
+    var src=e.touches?e.touches[0]:e;
+    return{x:src.clientX-r.left,y:src.clientY-r.top};
+  }
+  function scratch(pos){
+    ctx.globalCompositeOperation='destination-out';
+    ctx.beginPath();ctx.arc(pos.x,pos.y,22,0,Math.PI*2);ctx.fill();
+    checkReveal();
+  }
+  function checkReveal(){
+    if(revealed)return;
+    var data=ctx.getImageData(0,0,cv.width,cv.height).data;
+    var transparent=0;
+    for(var i=3;i<data.length;i+=4)if(data[i]<128)transparent++;
+    var pct=transparent/total;
+    if(pct>0.6){
+      revealed=true;
+      ctx.clearRect(0,0,cv.width,cv.height);
+      var done=document.getElementById('scratch-done');
+      if(done)done.classList.add('show');
+      confetti();
+    }
+  }
+
+  cv.addEventListener('mousedown',function(e){isDrawing=true;scratch(getPos(e));});
+  cv.addEventListener('mousemove',function(e){if(isDrawing)scratch(getPos(e));});
+  cv.addEventListener('mouseup',function(){isDrawing=false;});
+  cv.addEventListener('touchstart',function(e){e.preventDefault();isDrawing=true;scratch(getPos(e));},{passive:false});
+  cv.addEventListener('touchmove',function(e){e.preventDefault();if(isDrawing)scratch(getPos(e));},{passive:false});
+  cv.addEventListener('touchend',function(){isDrawing=false;});
+})();
+
+// ═══════════════════════════════════════════════════════════
+//  STAR / CONSTELLATION CANVAS (Pisces section)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  var cv=document.getElementById('star-canvas');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  function rsz(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;}
+  window.addEventListener('resize',rsz);rsz();
+  var stars=Array.from({length:90},function(){
+    return{x:Math.random(),y:Math.random(),r:0.3+Math.random()*1.4,
+      a:Math.random(),da:(Math.random()-0.5)*0.008};
+  });
+  function draw(){
+    requestAnimationFrame(draw);
+    ctx.clearRect(0,0,cv.width,cv.height);
+    stars.forEach(function(s){
+      s.a=Math.max(0.05,Math.min(0.95,s.a+s.da));
+      if(s.a>=0.95||s.a<=0.05)s.da*=-1;
+      ctx.beginPath();ctx.arc(s.x*cv.width,s.y*cv.height,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(200,170,255,'+s.a+')';ctx.fill();
+    });
+  }
+  draw();
+})();
+
+// ═══════════════════════════════════════════════════════════
+//  CHECKLIST
+// ═══════════════════════════════════════════════════════════
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  var box=el.querySelector('.cl-box');
+  box.textContent=el.classList.contains('checked')?'✓':'';
+  var all=document.querySelectorAll('.cl-item');
+  var done=document.querySelectorAll('.cl-item.checked').length;
+  var bar=document.getElementById('cl-bar');
+  var score=document.getElementById('cl-score');
+  if(bar)bar.style.width=(done/all.length*100)+'%';
+  if(score)score.textContent=done+' / '+all.length+' memories relived'+(done===all.length?' 💕 That's all of them!':'');
+  if(done===all.length)confetti();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BALLOONS
+// ═══════════════════════════════════════════════════════════
+(function(){
+  var field=document.getElementById('balloon-field');
+  if(!field)return;
+  var wishes=[
+    'Joy 💛','Love 💕','Health 🌿','Success ⭐','Laughter 😄',
+    'Peace 🌊','Magic ✨','Growth 🌱','Travel ✈️','Courage 🔥',
+    'Dreams 🌙','Warmth ☀️','Beauty 🌸','Wonder 💫','Music 🎵',
+    'Dance 🦋','Hope 🌈','Grace 💐','Light 🕯️','Forever 🤝','Us 💖'
+  ];
+  var colors=['#e8547a','#e8b86d','#7ec8e3','#88d8b0','#c9b1f5','#f9a8c9','#ff8fab','#ffd6a5','#b5ead7'];
+  var popped=0;
+
+  wishes.forEach(function(w,i){
+    var b=document.createElement('div');b.className='balloon';
+    var col=colors[i%colors.length];
+    var left=5+Math.random()*87;
+    var dur=3+Math.random()*2.5;
+    var rot=(-4+Math.random()*8);
+    b.style.cssText='left:'+left+'%;--dur:'+dur+'s;--rot:'+rot+'deg;--bc:'+col+';animation-delay:'+(i*0.15)+'s';
+    b.innerHTML='<div class="balloon-body" style="--bc:'+col+'">'+w+'</div><div class="balloon-string"></div>';
+    b.addEventListener('click',function(){popBalloon(b,i);});
+    b.addEventListener('touchend',function(e){e.preventDefault();popBalloon(b,i);},{passive:false});
+    field.appendChild(b);
+  });
+
+  function popBalloon(b,i){
+    if(b.classList.contains('popped'))return;
+    b.classList.add('popped');
+    var rect=b.getBoundingClientRect();
+    var fr=field.getBoundingClientRect();
+    var pop=document.createElement('div');
+    pop.className='balloon-pop';
+    pop.textContent='💥';
+    pop.style.left=(rect.left-fr.left+25)+'px';
+    pop.style.top=(rect.top-fr.top+30)+'px';
+    field.appendChild(pop);
+    setTimeout(function(){if(pop.parentNode)pop.parentNode.removeChild(pop);},700);
+    b.style.opacity='0';b.style.transform='scale(0)';b.style.transition='all 0.3s ease';
+    popped++;
+    if(popped===wishes.length){
+      setTimeout(function(){
+        var msg=document.getElementById('balloons-msg');
+        if(msg)msg.classList.add('show');
+        confetti();confetti();
+      },400);
+    }
+  }
+})();
+
+// ═══════════════════════════════════════════════════════════
+//  ROTATING LOVE QUOTES
+// ═══════════════════════════════════════════════════════════
+(function(){
+  var quotes=[
+    {t:"You are braver than you believe, stronger than you seem, and loved more than you'll ever know.",a:"— Written for Naina 💕"},
+    {t:"She is clothed in strength and dignity, and she laughs without fear of the future.",a:"— Proverbs 31:25 · Made for Naina"},
+    {t:"The most beautiful thing in the world is a woman who is genuinely herself.",a:"— Written for Naina 🌸"},
+    {t:"To the world you might be one person, but to one person you might be the whole world.",a:"— Made for Naina 💫"},
+    {t:"You are extraordinary. Not in spite of who you are, but because of every single part of you.",a:"— Always, yours 💖"},
+    {t:"Some people arrive and make such a beautiful impact on your life, you can barely remember what it was like without them.",a:"— For Naina, always"},
+  ];
+  var idx=0;
+  var qText=document.getElementById('quote-text');
+  var qAuth=document.getElementById('quote-author');
+  var qNav=document.getElementById('quote-nav');
+  if(!qText||!qAuth||!qNav)return;
+
+  // Build dots
+  quotes.forEach(function(_,i){
+    var d=document.createElement('div');d.className='q-dot'+(i===0?' on':'');
+    d.onclick=function(){showQ(i);};
+    qNav.appendChild(d);
+  });
+
+  function showQ(i){
+    idx=i;
+    qText.style.opacity='0';qText.style.transform='translateY(16px)';
+    setTimeout(function(){
+      qText.textContent=quotes[i].t;qAuth.textContent=quotes[i].a;
+      qText.style.transition='opacity 0.7s ease,transform 0.7s ease';
+      qText.style.opacity='1';qText.style.transform='translateY(0)';
+    },350);
+    document.querySelectorAll('.q-dot').forEach(function(d,j){d.classList.toggle('on',j===i);});
+  }
+  qText.style.transition='opacity 0.7s ease,transform 0.7s ease';
+  setInterval(function(){showQ((idx+1)%quotes.length);},5000);
+})();
+
 </script>
 </body>
 </html>
