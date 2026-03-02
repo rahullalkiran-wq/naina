@@ -517,55 +517,42 @@ section { position:relative; z-index:1; }
 @keyframes breathe { 0%,100%{opacity:0.45} 50%{opacity:1} }
 
 .cake-wrap {
-  position:relative; width:290px; margin:0 auto;
+  position:relative; width:320px; margin:0 auto;
 }
-/* Warm glow behind cake when candles are lit */
+/* Warm glow behind cake */
 .cake-wrap::before {
   content:'';
   position:absolute;
-  top:-20px; left:50%; transform:translateX(-50%);
-  width:200px; height:80px;
-  background:radial-gradient(ellipse, rgba(255,180,0,0.35) 0%, transparent 70%);
-  animation:candleglow 0.6s ease-in-out infinite alternate;
+  top:5px; left:50%; transform:translateX(-50%);
+  width:220px; height:60px;
+  background:radial-gradient(ellipse, rgba(255,200,50,0.3) 0%, transparent 70%);
+  animation:candleglow 0.7s ease-in-out infinite alternate;
   pointer-events:none; z-index:0;
 }
 @keyframes candleglow {
-  from { opacity:0.6; transform:translateX(-50%) scaleX(1); }
-  to   { opacity:1;   transform:translateX(-50%) scaleX(1.1); }
+  from { opacity:0.5; width:200px; }
+  to   { opacity:0.9; width:240px; }
 }
 .cake-wrap.all-out::before { display:none; }
-.cake-svg { width:100%; height:auto; overflow:visible; position:relative; z-index:1; }
+.cake-svg { width:100%; height:auto; overflow:visible; display:block; }
 
 /* Candles */
 .cg { cursor:pointer; }
-.cg:hover .cbody { filter:brightness(1.08); }
-
-/* Flame glow effect on cake */
-.cake-wrap { filter:drop-shadow(0 20px 45px rgba(232,84,122,0.22)); }
-.cg:not(.blown) { filter:drop-shadow(0 0 8px rgba(255,200,50,0.9)); }
+.cg:hover .cbody { opacity:0.85; }
 
 .flame {
-  transform-origin:center bottom;
-  animation:flick 0.3s ease-in-out infinite alternate;
+  transform-origin:50% 100%;
+  animation:flick 0.35s ease-in-out infinite alternate;
 }
 @keyframes flick {
-  0%  { transform:scaleX(1)    scaleY(1)    rotate(-5deg); opacity:1; }
-  33% { transform:scaleX(0.8)  scaleY(1.15) rotate(3deg);  opacity:0.95; }
-  66% { transform:scaleX(1.1)  scaleY(0.9)  rotate(-2deg); opacity:1; }
-  100%{ transform:scaleX(0.9)  scaleY(1.1)  rotate(4deg);  opacity:0.9; }
+  0%   { transform:rotate(-6deg) scaleY(1);    }
+  50%  { transform:rotate(4deg)  scaleY(1.12); }
+  100% { transform:rotate(-3deg) scaleY(0.92); }
 }
 
-/* Flame glow pulse */
-.flame ellipse:first-child {
-  filter:drop-shadow(0 0 6px rgba(255,220,50,1));
-  animation:flameglow 0.4s ease-in-out infinite alternate;
-}
-@keyframes flameglow {
-  from { opacity:0.85; }
-  to   { opacity:1; filter:drop-shadow(0 0 12px rgba(255,180,0,1)); }
-}
-.cg.blown .flame { display:none; }
-.cg.blown .cbody { opacity:0.45; }
+.cg.blown .flame   { display:none; }
+.cg.blown .cbody   { opacity:0.35; }
+.cg.blown line     { opacity:0.35; }
 .smoke {
   display:none; stroke:rgba(150,120,120,0.45);
   stroke-width:1.8; fill:none; stroke-linecap:round;
@@ -1076,90 +1063,110 @@ footer {
   <div class="cake-wrap fade-up">
     <div id="wish-pop">🌟 Wish sent to the universe!</div>
 
-    <svg class="cake-svg" viewBox="0 0 290 272" xmlns="http://www.w3.org/2000/svg">
+    <svg class="cake-svg" viewBox="0 0 290 310" xmlns="http://www.w3.org/2000/svg">
       <!-- shadow -->
-      <ellipse cx="145" cy="252" rx="120" ry="10" fill="rgba(0,0,0,0.07)"/>
-      <!-- ── BOTTOM TIER ── -->
-      <rect x="10" y="192" width="270" height="60" rx="14" fill="#f9a8c9"/>
-      <rect x="10" y="192" width="270" height="18" rx="9" fill="#f48ab5"/>
-      <path d="M10 192 Q23 179 36 192 Q49 179 62 192 Q75 179 88 192 Q101 179 114 192 Q127 179 140 192 Q153 179 166 192 Q179 179 192 192 Q205 179 218 192 Q231 179 244 192 Q257 179 270 192 L280 192 L10 192Z" fill="#fff5f9"/>
-      <text x="145" y="228" text-anchor="middle" font-size="11" fill="rgba(192,48,96,0.45)" font-family="'Cormorant Garamond',serif" font-style="italic">♡ Happy Birthday Naina ♡</text>
-      <!-- ── MID TIER ── -->
-      <rect x="36" y="140" width="218" height="58" rx="12" fill="#f7c5dc"/>
-      <rect x="36" y="140" width="218" height="16" rx="8" fill="#f2a5c8"/>
-      <path d="M36 140 Q48 129 60 140 Q72 129 84 140 Q96 129 108 140 Q120 129 132 140 Q144 129 156 140 Q168 129 180 140 Q192 129 204 140 Q216 129 228 140 Q240 129 252 140 L254 140 L36 140Z" fill="#fff5f9"/>
-      <text x="145" y="172" text-anchor="middle" font-size="10" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">Naina 💕 21</text>
-      <!-- ── TOP TIER ── -->
-      <rect x="68" y="94" width="154" height="51" rx="11" fill="#fce4ec"/>
-      <rect x="68" y="94" width="154" height="14" rx="7" fill="#f9c2d4"/>
-      <path d="M68 94 Q78 83 88 94 Q98 83 108 94 Q118 83 128 94 Q138 83 148 94 Q158 83 168 94 Q178 83 188 94 Q198 83 208 94 Q218 83 222 94 L222 94 L68 94Z" fill="#fff5f9"/>
-      <text x="145" y="120" text-anchor="middle" font-size="9.5" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">With all my love</text>
-      <!-- dots -->
-      <circle cx="36" cy="220" r="6" fill="#f7c948" opacity=".7"/><circle cx="75" cy="230" r="4" fill="#e8547a" opacity=".6"/>
-      <circle cx="210" cy="225" r="5" fill="#a8d8f0" opacity=".7"/><circle cx="250" cy="218" r="5" fill="#f7c948" opacity=".65"/>
-      <circle cx="56" cy="163" r="4" fill="#e8547a" opacity=".55"/><circle cx="232" cy="160" r="4" fill="#b8f0c8" opacity=".6"/>
+      <ellipse cx="145" cy="295" rx="120" ry="10" fill="rgba(0,0,0,0.07)"/>
 
-      <!-- ═══ 5 CANDLES ═══ -->
-      <!-- C1 rose -->
+      <!-- ── BOTTOM TIER ── -->
+      <rect x="10" y="225" width="270" height="62" rx="14" fill="#f9a8c9"/>
+      <rect x="10" y="225" width="270" height="18" rx="9" fill="#f48ab5"/>
+      <path d="M10 225 Q23 213 36 225 Q49 213 62 225 Q75 213 88 225 Q101 213 114 225 Q127 213 140 225 Q153 213 166 225 Q179 213 192 225 Q205 213 218 225 Q231 213 244 225 Q257 213 270 225 L280 225 L10 225Z" fill="#fff5f9"/>
+      <text x="145" y="262" text-anchor="middle" font-size="11" fill="rgba(192,48,96,0.45)" font-family="'Cormorant Garamond',serif" font-style="italic">♡ Happy Birthday Naina ♡</text>
+
+      <!-- ── MID TIER ── -->
+      <rect x="36" y="168" width="218" height="60" rx="12" fill="#f7c5dc"/>
+      <rect x="36" y="168" width="218" height="16" rx="8" fill="#f2a5c8"/>
+      <path d="M36 168 Q48 157 60 168 Q72 157 84 168 Q96 157 108 168 Q120 157 132 168 Q144 157 156 168 Q168 157 180 168 Q192 157 204 168 Q216 157 228 168 Q240 157 252 168 L254 168 L36 168Z" fill="#fff5f9"/>
+      <text x="145" y="202" text-anchor="middle" font-size="10" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">Naina 💕 21</text>
+
+      <!-- ── TOP TIER ── -->
+      <rect x="68" y="118" width="154" height="53" rx="11" fill="#fce4ec"/>
+      <rect x="68" y="118" width="154" height="15" rx="7" fill="#f9c2d4"/>
+      <path d="M68 118 Q78 107 88 118 Q98 107 108 118 Q118 107 128 118 Q138 107 148 118 Q158 107 168 118 Q178 107 188 118 Q198 107 208 118 Q218 107 222 118 L222 118 L68 118Z" fill="#fff5f9"/>
+      <text x="145" y="147" text-anchor="middle" font-size="9.5" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">With all my love</text>
+
+      <!-- decoration dots -->
+      <circle cx="36"  cy="253" r="6" fill="#f7c948" opacity=".7"/>
+      <circle cx="75"  cy="263" r="4" fill="#e8547a" opacity=".6"/>
+      <circle cx="210" cy="258" r="5" fill="#a8d8f0" opacity=".7"/>
+      <circle cx="250" cy="251" r="5" fill="#f7c948" opacity=".65"/>
+      <circle cx="56"  cy="192" r="4" fill="#e8547a" opacity=".55"/>
+      <circle cx="232" cy="189" r="4" fill="#b8f0c8" opacity=".6"/>
+
+      <!-- ═══════════════════════════════
+           5 CANDLES — flame sits exactly on top of each candle rect
+           Candle top Y = candle y value
+           Flame translate = (candle-center-x, candle-top-y)
+      ═══════════════════════════════ -->
+
+      <!-- C1 — rose — top at y=88, center-x=95 -->
       <g class="cg" id="c1" onclick="blowC('c1',0)">
-        <rect class="cbody" x="89" y="68" width="12" height="30" rx="4" fill="#e8547a"/>
-        <g class="flame" transform="translate(95,68)">
-          <ellipse cx="0" cy="-14" rx="9" ry="16" fill="#ff9500" opacity="0.6"/>
-          <ellipse cx="0" cy="-12" rx="7" ry="13" fill="#ffcc00"/>
-          <ellipse cx="0" cy="-13" rx="4.5" ry="9" fill="#fff5a0"/>
-          <ellipse cx="0" cy="-17" rx="2.5" ry="5" fill="#ffffff"/>
+        <!-- candle body -->
+        <rect class="cbody" x="89" y="88" width="12" height="34" rx="4" fill="#e8547a"/>
+        <!-- wick -->
+        <line x1="95" y1="88" x2="95" y2="83" stroke="#3a2020" stroke-width="1.5"/>
+        <!-- flame — positioned at wick tip (95, 83) -->
+        <g class="flame" transform="translate(95,83)">
+          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
         </g>
-        <path class="smoke" d="M95,67 C95,60 90,57 95,50 C100,43 95,40 95,32"/>
-        <line x1="95" y1="68" x2="95" y2="64" stroke="#3a2020" stroke-width="1.4"/>
+        <path class="smoke" d="M95,82 C95,74 90,71 95,63 C100,55 95,51 95,43"/>
       </g>
-      <!-- C2 gold -->
+
+      <!-- C2 — gold — top at y=80, center-x=118 -->
       <g class="cg" id="c2" onclick="blowC('c2',1)">
-        <rect class="cbody" x="112" y="62" width="12" height="36" rx="4" fill="#e8b86d"/>
-        <g class="flame" transform="translate(118,62)">
-          <ellipse cx="0" cy="-14" rx="9" ry="16" fill="#ff9500" opacity="0.6"/>
-          <ellipse cx="0" cy="-12" rx="7" ry="13" fill="#ffcc00"/>
-          <ellipse cx="0" cy="-13" rx="4.5" ry="9" fill="#fff5a0"/>
-          <ellipse cx="0" cy="-17" rx="2.5" ry="5" fill="#ffffff"/>
+        <rect class="cbody" x="112" y="80" width="12" height="42" rx="4" fill="#e8b86d"/>
+        <line x1="118" y1="80" x2="118" y2="75" stroke="#3a2020" stroke-width="1.5"/>
+        <g class="flame" transform="translate(118,75)">
+          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
         </g>
-        <path class="smoke" d="M118,61 C118,54 113,51 118,44 C123,37 118,34 118,26"/>
-        <line x1="118" y1="62" x2="118" y2="58" stroke="#3a2020" stroke-width="1.4"/>
+        <path class="smoke" d="M118,74 C118,66 113,63 118,55 C123,47 118,43 118,35"/>
       </g>
-      <!-- C3 sky centre tallest -->
+
+      <!-- C3 — sky blue — TALLEST — top at y=70, center-x=144 -->
       <g class="cg" id="c3" onclick="blowC('c3',2)">
-        <rect class="cbody" x="138" y="55" width="12" height="43" rx="4" fill="#7ec8e3"/>
-        <g class="flame" transform="translate(144,55)">
-          <ellipse cx="0" cy="-16" rx="10" ry="18" fill="#ff9500" opacity="0.6"/>
-          <ellipse cx="0" cy="-14" rx="8"  ry="15" fill="#ffcc00"/>
-          <ellipse cx="0" cy="-15" rx="5"  ry="10" fill="#fff5a0"/>
-          <ellipse cx="0" cy="-20" rx="3"  ry="6"  fill="#ffffff"/>
+        <rect class="cbody" x="138" y="70" width="12" height="52" rx="4" fill="#7ec8e3"/>
+        <line x1="144" y1="70" x2="144" y2="64" stroke="#3a2020" stroke-width="1.5"/>
+        <g class="flame" transform="translate(144,64)">
+          <ellipse cx="0" cy="-14" rx="9"  ry="16" fill="#ff8c00" opacity="0.55"/>
+          <ellipse cx="0" cy="-13" rx="7"  ry="13" fill="#ffbf00"/>
+          <ellipse cx="0" cy="-13" rx="4"  ry="8.5" fill="#fff176"/>
+          <ellipse cx="0" cy="-18" rx="2.5" ry="5"  fill="#ffffff"/>
         </g>
-        <path class="smoke" d="M144,54 C144,47 139,44 144,37 C149,30 144,27 144,19"/>
-        <line x1="144" y1="55" x2="144" y2="51" stroke="#3a2020" stroke-width="1.4"/>
+        <path class="smoke" d="M144,63 C144,55 139,52 144,44 C149,36 144,32 144,24"/>
       </g>
-      <!-- C4 mint -->
+
+      <!-- C4 — mint — top at y=80, center-x=171 -->
       <g class="cg" id="c4" onclick="blowC('c4',3)">
-        <rect class="cbody" x="165" y="62" width="12" height="36" rx="4" fill="#88d8b0"/>
-        <g class="flame" transform="translate(171,62)">
-          <ellipse cx="0" cy="-14" rx="9" ry="16" fill="#ff9500" opacity="0.6"/>
-          <ellipse cx="0" cy="-12" rx="7" ry="13" fill="#ffcc00"/>
-          <ellipse cx="0" cy="-13" rx="4.5" ry="9" fill="#fff5a0"/>
-          <ellipse cx="0" cy="-17" rx="2.5" ry="5" fill="#ffffff"/>
+        <rect class="cbody" x="165" y="80" width="12" height="42" rx="4" fill="#88d8b0"/>
+        <line x1="171" y1="80" x2="171" y2="75" stroke="#3a2020" stroke-width="1.5"/>
+        <g class="flame" transform="translate(171,75)">
+          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
         </g>
-        <path class="smoke" d="M171,61 C171,54 166,51 171,44 C176,37 171,34 171,26"/>
-        <line x1="171" y1="62" x2="171" y2="58" stroke="#3a2020" stroke-width="1.4"/>
+        <path class="smoke" d="M171,74 C171,66 166,63 171,55 C176,47 171,43 171,35"/>
       </g>
-      <!-- C5 lavender -->
+
+      <!-- C5 — lavender — top at y=88, center-x=194 -->
       <g class="cg" id="c5" onclick="blowC('c5',4)">
-        <rect class="cbody" x="188" y="68" width="12" height="30" rx="4" fill="#c9b1f5"/>
-        <g class="flame" transform="translate(194,68)">
-          <ellipse cx="0" cy="-14" rx="9" ry="16" fill="#ff9500" opacity="0.6"/>
-          <ellipse cx="0" cy="-12" rx="7" ry="13" fill="#ffcc00"/>
-          <ellipse cx="0" cy="-13" rx="4.5" ry="9" fill="#fff5a0"/>
-          <ellipse cx="0" cy="-17" rx="2.5" ry="5" fill="#ffffff"/>
+        <rect class="cbody" x="188" y="88" width="12" height="34" rx="4" fill="#c9b1f5"/>
+        <line x1="194" y1="88" x2="194" y2="83" stroke="#3a2020" stroke-width="1.5"/>
+        <g class="flame" transform="translate(194,83)">
+          <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
+          <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
+          <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
+          <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
         </g>
-        <path class="smoke" d="M194,67 C194,60 189,57 194,50 C199,43 194,40 194,32"/>
-        <line x1="194" y1="68" x2="194" y2="64" stroke="#3a2020" stroke-width="1.4"/>
+        <path class="smoke" d="M194,82 C194,74 189,71 194,63 C199,55 194,51 194,43"/>
       </g>
+
     </svg>
   </div>
 
