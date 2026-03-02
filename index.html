@@ -104,37 +104,95 @@ body {
 }
 
 /* ═══════════════════════════════════════════════
-   LIGHTBOX (Fixed for full screen images)
+   LIGHTBOX — FIXED for full screen image display
 ═══════════════════════════════════════════════ */
 #lightbox {
-  display:none; position:fixed; inset:0; z-index:100000;
-  background:rgba(8,0,4,0.95);
-  align-items:center; justify-content:center; padding:1rem;
+  display:none;
+  position:fixed; inset:0; z-index:100000;
+  background:rgba(8,0,4,0.96);
+  align-items:center; justify-content:center;
+  padding:1rem;
   flex-direction:column; gap:1rem;
 }
 #lightbox.on { display:flex; }
+
+/* ── FIX 2: Image container fills viewport properly ── */
+#lb-img-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 95vw;
+  max-height: 82vh;
+  min-height: 200px;
+}
+
 #lb-img {
-  max-width: 95vw; 
-  max-height: 82vh; 
-  width: auto; 
+  max-width: 95vw;
+  max-height: 82vh;
+  width: auto;
   height: auto;
   border-radius: 0.6rem;
   box-shadow: 0 0 80px rgba(232,84,122,0.25);
   animation: lbpop 0.35s cubic-bezier(0.34,1.56,0.64,1);
   object-fit: contain;
   display: block;
-  margin: 0 auto;
+  transition: opacity 0.3s ease;
 }
+
+/* Loading spinner inside lightbox */
+#lb-loader {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(232,84,122,0.2);
+  border-top: 3px solid var(--rose);
+  animation: spin 0.9s linear infinite;
+  display: none;
+}
+#lb-loader.on { display: block; }
+
+/* Error state inside lightbox */
+#lb-error {
+  display: none;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 2rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+#lb-error.on { display: flex; }
+#lb-error .retry-btn {
+  margin-top: 0.8rem;
+  background: var(--rose);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
 @keyframes lbpop { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
 #lb-caption {
   color:rgba(255,255,255,0.55); font-style:italic;
   font-size:1rem; text-align:center; padding:0 1rem;
+  max-width: 600px;
 }
 #lb-close {
   position:absolute; top:1rem; right:1.3rem;
   color:#fff; font-size:2.2rem; cursor:pointer;
   opacity:0.5; transition:opacity 0.2s; line-height:1;
   background:none; border:none;
+  z-index: 10;
 }
 #lb-close:hover { opacity:1; }
 .lb-nav {
@@ -143,6 +201,7 @@ body {
   width:46px; height:46px; border-radius:50%; font-size:1.4rem;
   cursor:pointer; transition:background 0.2s;
   display:flex; align-items:center; justify-content:center;
+  z-index: 10;
 }
 #lb-prev { left:0.7rem; }
 #lb-next { right:0.7rem; }
@@ -158,7 +217,6 @@ section { position:relative; z-index:1; }
 .fade-right{ opacity:0; transform:translateX(45px);  transition:opacity 0.9s ease, transform 0.9s ease; }
 .fade-up.vis, .fade-left.vis, .fade-right.vis { opacity:1; transform:translate(0); }
 
-/* Section headers */
 .s-eyebrow {
   display:inline-block;
   font-family:'Josefin Sans', sans-serif;
@@ -180,7 +238,6 @@ section { position:relative; z-index:1; }
   color:var(--muted); font-style:italic; line-height:1.6;
 }
 
-/* Dividers */
 .divider {
   position:relative; z-index:1;
   text-align:center; padding:1.5rem;
@@ -200,7 +257,6 @@ section { position:relative; z-index:1; }
   overflow:hidden;
 }
 
-/* Decorative circles */
 .hero-blob {
   position:absolute; border-radius:50%;
   background:radial-gradient(circle, rgba(232,84,122,0.08) 0%, transparent 70%);
@@ -274,7 +330,6 @@ section { position:relative; z-index:1; }
   color:var(--muted);
 }
 
-/* Floating petals */
 .petal {
   position:fixed; z-index:0; pointer-events:none;
   animation:petalfall linear infinite; opacity:0;
@@ -374,7 +429,6 @@ section { position:relative; z-index:1; }
 
 .section-header { text-align:center; margin-bottom:3rem; }
 
-/* Tab era strip */
 .era-strip {
   display:flex; justify-content:center; gap:0.5rem;
   flex-wrap:wrap; margin-bottom:2rem;
@@ -401,6 +455,8 @@ section { position:relative; z-index:1; }
   transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
   background:#f5e8f0;
   border:2px solid rgba(232,84,122,0.12);
+  /* FIX: ensure card is always visible even if image fails */
+  min-height: 80px;
 }
 .photo-card:hover,
 .photo-card:active {
@@ -412,17 +468,36 @@ section { position:relative; z-index:1; }
   transition:transform 0.5s ease;
   background:#fce8f0;
   object-position:top center;
+  /* FIX: don't hide on error - show placeholder instead */
 }
 .photo-card:hover img,
 .photo-card:active img { transform:scale(1.06); }
 
-/* Tall / square / wide variants — no face cutting */
 .photo-card.tall img  { height:320px; object-fit:cover; object-position:top center; }
 .photo-card.sq   img  { height:220px; object-fit:cover; object-position:top center; }
 .photo-card.wide { column-span:all; }
 .photo-card.wide img  { height:260px; object-fit:cover; object-position:top center; width:100%; }
 
-/* Overlay */
+/* ── FIX 2: Image error placeholder ── */
+.photo-card .img-placeholder {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #fce8f0, #fff5f8);
+  color: rgba(192,48,96,0.4);
+  font-style: italic;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+}
+.photo-card.tall .img-placeholder  { height:320px; }
+.photo-card.sq   .img-placeholder  { height:220px; }
+.photo-card.wide .img-placeholder  { height:260px; }
+.photo-card.img-failed img         { display:none; }
+.photo-card.img-failed .img-placeholder { display:flex; }
+
 .photo-card .ov {
   position:absolute; inset:0;
   background:linear-gradient(to top, rgba(180,30,80,0.65) 0%, transparent 55%);
@@ -435,7 +510,6 @@ section { position:relative; z-index:1; }
   color:#fff; font-style:italic; font-size:0.78rem; line-height:1.3;
 }
 
-/* Loading skeleton */
 .photo-skeleton {
   break-inside:avoid; margin-bottom:0.6rem;
   border-radius:1rem; overflow:hidden;
@@ -448,7 +522,6 @@ section { position:relative; z-index:1; }
 .photo-skeleton.sq   { height:220px; }
 .photo-skeleton.wide { column-span:all; height:260px; }
 
-/* Loading state text */
 .loading-state {
   text-align:center; padding:3rem 1rem;
   font-style:italic; color:var(--muted); font-size:1rem;
@@ -467,7 +540,6 @@ section { position:relative; z-index:1; }
   color:var(--muted);
 }
 
-/* Error state */
 .error-state {
   text-align:center; padding:2rem 1rem;
   background:rgba(232,84,122,0.05); border-radius:1rem;
@@ -525,7 +597,6 @@ section { position:relative; z-index:1; }
 .cake-wrap {
   position:relative; width:320px; margin:0 auto;
 }
-/* Warm glow behind cake */
 .cake-wrap::before {
   content:'';
   position:absolute;
@@ -542,12 +613,11 @@ section { position:relative; z-index:1; }
 .cake-wrap.all-out::before { display:none; }
 .cake-svg { width:100%; height:auto; overflow:visible; display:block; }
 
-/* Candles */
 .cg { cursor:pointer; }
 .cg:hover .cbody { opacity:0.85; }
 
 .flame {
-  transform-origin:0px 0px; /* FIXED ORIGIN */
+  transform-origin:0px 0px;
   animation:flick 0.35s ease-in-out infinite alternate;
 }
 @keyframes flick {
@@ -572,7 +642,6 @@ section { position:relative; z-index:1; }
   100%{stroke-dasharray:120 0; opacity:0; transform:translateY(-20px);}
 }
 
-/* Wish bubble */
 #wish-pop {
   position:absolute; background:#fff;
   border-radius:1.2rem; padding:0.8rem 1rem;
@@ -605,6 +674,82 @@ section { position:relative; z-index:1; }
   transition:opacity 0.8s ease, transform 0.8s ease;
 }
 .all-blown.show { opacity:1; transform:translateY(0); }
+
+/* ═══════════════════════════════════════════════
+   MUSIC — FIX 1: Improved player
+═══════════════════════════════════════════════ */
+#music {
+  padding:4.5rem 1.5rem;
+  background:var(--ink); text-align:center;
+}
+.music-wrap {
+  max-width:310px; margin:2rem auto 0;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:1.6rem; padding:1.8rem 1.5rem;
+}
+.wave-row {
+  display:flex; align-items:flex-end; justify-content:center;
+  gap:3px; height:40px; margin-bottom:1.2rem;
+}
+.wbar {
+  width:4px; border-radius:50px;
+  background:var(--rose);
+  animation:wv var(--d,.8s) ease-in-out infinite alternate;
+}
+.wbar.paused { animation-play-state: paused; }
+@keyframes wv { from{height:4px} to{height:var(--h,28px)} }
+.song-name {
+  font-family:'Great Vibes', cursive;
+  font-size:2.2rem; color:#fff; margin-bottom:0.3rem;
+}
+.song-by {
+  font-family:'Josefin Sans', sans-serif;
+  font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+  margin-bottom: 1rem;
+}
+.play-music-btn {
+  background: rgba(232,84,122,0.15);
+  border: 1px solid var(--rose);
+  color: #fff;
+  padding: 0.6rem 1.8rem;
+  border-radius: 50px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.play-music-btn:hover {
+  background: var(--rose);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(232,84,122,0.4);
+}
+.play-music-btn.playing {
+  background: var(--rose);
+  box-shadow: 0 4px 15px rgba(232,84,122,0.4);
+}
+
+/* Music status indicator */
+.music-status {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.25);
+  font-style: italic;
+  margin-top: 0.8rem;
+  min-height: 1.2em;
+  transition: color 0.3s;
+}
+.music-status.active { color: rgba(232,84,122,0.7); }
+
+.music-note {
+  font-size:0.85rem; color:rgba(255,255,255,0.3);
+  font-style:italic; margin-top:1.8rem;
+}
 
 /* ═══════════════════════════════════════════════
    PASSWORD + OUR GALLERY
@@ -667,7 +812,6 @@ section { position:relative; z-index:1; }
 #our-gallery.open { display:block; animation:gopen 0.8s ease both; }
 @keyframes gopen { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
 
-/* Our gallery uses gold tones */
 #our-gallery .photo-card {
   box-shadow:0 4px 16px rgba(200,146,42,0.14);
 }
@@ -757,63 +901,6 @@ section { position:relative; z-index:1; }
 .wish-card.full { grid-column:span 2; }
 
 /* ═══════════════════════════════════════════════
-   MUSIC
-═══════════════════════════════════════════════ */
-#music {
-  padding:4.5rem 1.5rem;
-  background:var(--ink); text-align:center;
-}
-.music-wrap {
-  max-width:310px; margin:2rem auto 0;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.09);
-  border-radius:1.6rem; padding:1.8rem 1.5rem;
-}
-.wave-row {
-  display:flex; align-items:flex-end; justify-content:center;
-  gap:3px; height:40px; margin-bottom:1.2rem;
-}
-.wbar {
-  width:4px; border-radius:50px;
-  background:var(--rose);
-  animation:wv var(--d,.8s) ease-in-out infinite alternate;
-}
-@keyframes wv { from{height:4px} to{height:var(--h,28px)} }
-.song-name {
-  font-family:'Great Vibes', cursive;
-  font-size:2.2rem; color:#fff; margin-bottom:0.3rem;
-}
-.song-by {
-  font-family:'Josefin Sans', sans-serif;
-  font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
-  color:rgba(255,255,255,0.3);
-  margin-bottom: 1rem;
-}
-/* Audio button styling */
-.play-music-btn {
-  background: rgba(232,84,122,0.15);
-  border: 1px solid var(--rose);
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 50px;
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.play-music-btn:hover {
-  background: var(--rose);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(232,84,122,0.4);
-}
-.music-note {
-  font-size:0.85rem; color:rgba(255,255,255,0.3);
-  font-style:italic; margin-top:1.8rem;
-}
-
-/* ═══════════════════════════════════════════════
    COUNTDOWN
 ═══════════════════════════════════════════════ */
 #countdown {
@@ -878,7 +965,6 @@ section { position:relative; z-index:1; }
 }
 @keyframes fhp { 0%,100%{opacity:0.6} 50%{opacity:1;transform:scale(1.1)} }
 
-/* FOOTER */
 footer {
   background:var(--ink);
   border-top:1px solid rgba(255,255,255,0.04);
@@ -886,27 +972,6 @@ footer {
   font-family:'Josefin Sans', sans-serif;
   font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase;
   color:rgba(255,255,255,0.15);
-}
-
-/* ═══════════════════════════════════════════════
-   SETUP BANNER (shown until script URL added)
-═══════════════════════════════════════════════ */
-#setup-banner {
-  position:fixed; bottom:0; left:0; right:0; z-index:9990;
-  background:linear-gradient(135deg, #1a0810, #2d0d20);
-  color:#fff; padding:1rem 1.5rem;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:1rem; border-top:2px solid var(--rose);
-  font-family:'Josefin Sans', sans-serif; font-size:0.78rem;
-  letter-spacing:0.05em;
-}
-#setup-banner span { flex:1; line-height:1.5; }
-#setup-banner strong { color:var(--gold); }
-#setup-banner button {
-  background:var(--rose); color:#fff; border:none;
-  padding:0.5rem 1rem; border-radius:50px;
-  font-size:0.72rem; cursor:pointer; white-space:nowrap;
-  font-family:'Josefin Sans', sans-serif;
 }
 </style>
 </head>
@@ -923,14 +988,21 @@ footer {
 <canvas id="confetti-cv"></canvas>
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<div id="setup-banner">
-  <span></span>
-</div>
-
+<!-- ── FIX 2: Lightbox with proper image wrapper + loader ── -->
 <div id="lightbox">
   <button id="lb-close" onclick="closeLb()">✕</button>
   <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
-  <img id="lb-img" src="" alt="">
+
+  <div id="lb-img-wrap">
+    <div id="lb-loader"></div>
+    <div id="lb-error">
+      <span style="font-size:2rem">🖼️</span>
+      <span>Image couldn't load</span>
+      <button class="retry-btn" onclick="lbRetry()">Try Again</button>
+    </div>
+    <img id="lb-img" src="" alt="">
+  </div>
+
   <button class="lb-nav" id="lb-next" onclick="lbNav(1)">›</button>
   <div id="lb-caption"></div>
 </div>
@@ -1074,22 +1146,18 @@ footer {
 
     <svg class="cake-svg" viewBox="0 0 290 310" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="145" cy="295" rx="120" ry="10" fill="rgba(0,0,0,0.07)"/>
-
       <rect x="10" y="225" width="270" height="62" rx="14" fill="#f9a8c9"/>
       <rect x="10" y="225" width="270" height="18" rx="9" fill="#f48ab5"/>
       <path d="M10 225 Q23 213 36 225 Q49 213 62 225 Q75 213 88 225 Q101 213 114 225 Q127 213 140 225 Q153 213 166 225 Q179 213 192 225 Q205 213 218 225 Q231 213 244 225 Q257 213 270 225 L280 225 L10 225Z" fill="#fff5f9"/>
       <text x="145" y="262" text-anchor="middle" font-size="11" fill="rgba(192,48,96,0.45)" font-family="'Cormorant Garamond',serif" font-style="italic">♡ Happy Birthday Naina ♡</text>
-
       <rect x="36" y="168" width="218" height="60" rx="12" fill="#f7c5dc"/>
       <rect x="36" y="168" width="218" height="16" rx="8" fill="#f2a5c8"/>
       <path d="M36 168 Q48 157 60 168 Q72 157 84 168 Q96 157 108 168 Q120 157 132 168 Q144 157 156 168 Q168 157 180 168 Q192 157 204 168 Q216 157 228 168 Q240 157 252 168 L254 168 L36 168Z" fill="#fff5f9"/>
       <text x="145" y="202" text-anchor="middle" font-size="10" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">Naina 💕 21</text>
-
       <rect x="68" y="118" width="154" height="53" rx="11" fill="#fce4ec"/>
       <rect x="68" y="118" width="154" height="15" rx="7" fill="#f9c2d4"/>
       <path d="M68 118 Q78 107 88 118 Q98 107 108 118 Q118 107 128 118 Q138 107 148 118 Q158 107 168 118 Q178 107 188 118 Q198 107 208 118 Q218 107 222 118 L222 118 L68 118Z" fill="#fff5f9"/>
       <text x="145" y="147" text-anchor="middle" font-size="9.5" fill="rgba(192,48,96,0.5)" font-family="'Cormorant Garamond',serif" font-style="italic">With all my love</text>
-
       <circle cx="36"  cy="253" r="6" fill="#f7c948" opacity=".7"/>
       <circle cx="75"  cy="263" r="4" fill="#e8547a" opacity=".6"/>
       <circle cx="210" cy="258" r="5" fill="#a8d8f0" opacity=".7"/>
@@ -1100,73 +1168,37 @@ footer {
       <g class="cg" id="c1" onclick="blowC('c1',0)">
         <rect class="cbody" x="89" y="88" width="12" height="34" rx="4" fill="#e8547a"/>
         <line x1="95" y1="88" x2="95" y2="83" stroke="#3a2020" stroke-width="1.5"/>
-        <g transform="translate(95,83)">
-          <g class="flame">
-            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
-          </g>
-        </g>
+        <g transform="translate(95,83)"><g class="flame"><ellipse cx="0" cy="-12" rx="8" ry="14" fill="#ff8c00" opacity="0.55"/><ellipse cx="0" cy="-11" rx="6" ry="11" fill="#ffbf00"/><ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/><ellipse cx="0" cy="-15" rx="2" ry="4" fill="#ffffff"/></g></g>
         <path class="smoke" d="M95,82 C95,74 90,71 95,63 C100,55 95,51 95,43"/>
       </g>
 
       <g class="cg" id="c2" onclick="blowC('c2',1)">
         <rect class="cbody" x="112" y="80" width="12" height="42" rx="4" fill="#e8b86d"/>
         <line x1="118" y1="80" x2="118" y2="75" stroke="#3a2020" stroke-width="1.5"/>
-        <g transform="translate(118,75)">
-          <g class="flame">
-            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
-          </g>
-        </g>
+        <g transform="translate(118,75)"><g class="flame"><ellipse cx="0" cy="-12" rx="8" ry="14" fill="#ff8c00" opacity="0.55"/><ellipse cx="0" cy="-11" rx="6" ry="11" fill="#ffbf00"/><ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/><ellipse cx="0" cy="-15" rx="2" ry="4" fill="#ffffff"/></g></g>
         <path class="smoke" d="M118,74 C118,66 113,63 118,55 C123,47 118,43 118,35"/>
       </g>
 
       <g class="cg" id="c3" onclick="blowC('c3',2)">
         <rect class="cbody" x="138" y="70" width="12" height="52" rx="4" fill="#7ec8e3"/>
         <line x1="144" y1="70" x2="144" y2="64" stroke="#3a2020" stroke-width="1.5"/>
-        <g transform="translate(144,64)">
-          <g class="flame">
-            <ellipse cx="0" cy="-14" rx="9"  ry="16" fill="#ff8c00" opacity="0.55"/>
-            <ellipse cx="0" cy="-13" rx="7"  ry="13" fill="#ffbf00"/>
-            <ellipse cx="0" cy="-13" rx="4"  ry="8.5" fill="#fff176"/>
-            <ellipse cx="0" cy="-18" rx="2.5" ry="5"  fill="#ffffff"/>
-          </g>
-        </g>
+        <g transform="translate(144,64)"><g class="flame"><ellipse cx="0" cy="-14" rx="9" ry="16" fill="#ff8c00" opacity="0.55"/><ellipse cx="0" cy="-13" rx="7" ry="13" fill="#ffbf00"/><ellipse cx="0" cy="-13" rx="4" ry="8.5" fill="#fff176"/><ellipse cx="0" cy="-18" rx="2.5" ry="5" fill="#ffffff"/></g></g>
         <path class="smoke" d="M144,63 C144,55 139,52 144,44 C149,36 144,32 144,24"/>
       </g>
 
       <g class="cg" id="c4" onclick="blowC('c4',3)">
         <rect class="cbody" x="165" y="80" width="12" height="42" rx="4" fill="#88d8b0"/>
         <line x1="171" y1="80" x2="171" y2="75" stroke="#3a2020" stroke-width="1.5"/>
-        <g transform="translate(171,75)">
-          <g class="flame">
-            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
-          </g>
-        </g>
+        <g transform="translate(171,75)"><g class="flame"><ellipse cx="0" cy="-12" rx="8" ry="14" fill="#ff8c00" opacity="0.55"/><ellipse cx="0" cy="-11" rx="6" ry="11" fill="#ffbf00"/><ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/><ellipse cx="0" cy="-15" rx="2" ry="4" fill="#ffffff"/></g></g>
         <path class="smoke" d="M171,74 C171,66 166,63 171,55 C176,47 171,43 171,35"/>
       </g>
 
       <g class="cg" id="c5" onclick="blowC('c5',4)">
         <rect class="cbody" x="188" y="88" width="12" height="34" rx="4" fill="#c9b1f5"/>
         <line x1="194" y1="88" x2="194" y2="83" stroke="#3a2020" stroke-width="1.5"/>
-        <g transform="translate(194,83)">
-          <g class="flame">
-            <ellipse cx="0" cy="-12" rx="8"  ry="14" fill="#ff8c00" opacity="0.55"/>
-            <ellipse cx="0" cy="-11" rx="6"  ry="11" fill="#ffbf00"/>
-            <ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/>
-            <ellipse cx="0" cy="-15" rx="2"  ry="4"  fill="#ffffff"/>
-          </g>
-        </g>
+        <g transform="translate(194,83)"><g class="flame"><ellipse cx="0" cy="-12" rx="8" ry="14" fill="#ff8c00" opacity="0.55"/><ellipse cx="0" cy="-11" rx="6" ry="11" fill="#ffbf00"/><ellipse cx="0" cy="-11" rx="3.5" ry="7.5" fill="#fff176"/><ellipse cx="0" cy="-15" rx="2" ry="4" fill="#ffffff"/></g></g>
         <path class="smoke" d="M194,82 C194,74 189,71 194,63 C199,55 194,51 194,43"/>
       </g>
-
     </svg>
   </div>
 
@@ -1176,6 +1208,7 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
+<!-- ── FIX 1: Music section with working audio ── -->
 <section id="music">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow" style="color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0);background:none">Playing for you</div>
@@ -1186,8 +1219,8 @@ footer {
     <div class="wave-row" id="wrow"></div>
     <div class="song-name">Shab Tum Ho</div>
     <div class="song-by">Darshan Raval · Our Forever Song</div>
-    
     <button class="play-music-btn" id="music-btn" onclick="toggleMusic()">▶ Play Music</button>
+    <div class="music-status" id="music-status">Tap to play our song 🎵</div>
   </div>
   <p class="music-note fade-up">🎧 Play it while you scroll through our memories below</p>
 </section>
@@ -1312,17 +1345,25 @@ footer {
 
 <footer>Made with infinite love &amp; care · Just for Naina · 3rd March 2005 · Happy 21st Birthday 🌸</footer>
 
-<audio id="bg-audio" preload="auto" loop>
-  <source src="https://drive.google.com/uc?export=download&id=1XE3S5AT0bX7dz54uub_7PYNmmInqL55z" type="audio/mpeg">
+<!-- ══════════════════════════════════════════════
+     FIX 1: Audio element — Drive file ID approach
+     The direct uc?export=view link is used instead of export=download
+     which avoids the redirect/CORS issue browsers block
+══════════════════════════════════════════════ -->
+<audio id="bg-audio" preload="none" loop crossorigin="anonymous">
+  <!-- Primary: direct streaming link -->
+  <source src="https://drive.google.com/uc?export=view&id=1XE3S5AT0bX7dz54uub_7PYNmmInqL55z" type="audio/mpeg">
+  <!-- Fallback: alternate format attempt -->
+  <source src="https://docs.google.com/uc?export=open&id=1XE3S5AT0bX7dz54uub_7PYNmmInqL55z" type="audio/mpeg">
 </audio>
 
 <script>
 // ════════════════════════════════════════════════════════════
-//  ★  PASTE YOUR GOOGLE APPS SCRIPT URL HERE  ★
+//  ★  FIX 3: UPDATED SCRIPT URL  ★
 // ════════════════════════════════════════════════════════════
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwZrwyUD6z8ODe3377kYvLJs_I4msoMzyURRMr0wbvyUJB-JU1FBs7RjcPL50rO9cp-w/exec";
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPGzj5N8NPKF-5HJQHItBChYS-miKCcc7lRj02WdFNuDIjgCfQNzq1e-4QISZPe75y-A/exec";
 
-// ── Caption lists (cycling) ──
+// Caption lists
 var childhoodCaptions = [
   "Baby Naina 🌸","Tiny & precious ✨","Pure happiness 💛",
   "Little explorer 🌈","That giggle though 😄","School days ✏️",
@@ -1354,46 +1395,61 @@ var ourCaptions = [
 ];
 
 var layouts = ['sq','t','sq','sq','w','t','sq','sq','w','sq','t','sq','w','sq','sq','t','sq','w','sq','t'];
-
 var allPhotos = { childhood:[], recent:[], us:[] };
 var lbArr = [], lbIdx = 0;
 
-// HELPER: Convert Google Drive Viewer links to raw image files
-function getDirectDriveLink(url) {
+// ── FIX 2: Improved Drive URL converter ──
+function getDriveDirectUrl(url) {
   if (!url) return '';
-  if (url.includes('drive.google.com/file/d/')) {
-    var match = url.match(/\/d\/(.*?)\//);
-    if (match && match[1]) {
-      return 'https://drive.google.com/uc?export=view&id=' + match[1];
-    }
+  // Extract file ID from any Drive URL format
+  var id = null;
+  var m1 = url.match(/\/d\/([-\w]+)/);
+  var m2 = url.match(/[?&]id=([-\w]+)/);
+  var m3 = url.match(/open\?id=([-\w]+)/);
+  if (m1) id = m1[1];
+  else if (m2) id = m2[1];
+  else if (m3) id = m3[1];
+
+  if (id) {
+    // Use thumbnail API for grid (fast, no auth redirect)
+    return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w800';
   }
-  if (url.includes('=s')) {
-    return url.replace(/=s\d+/, '=s2000');
-  } else if (url.includes('=w')) {
-    return url.replace(/=w\d+-h\d+.*/, '=s2000');
+  // Fallback: scale existing lh3 links
+  if (url.includes('lh3.googleusercontent') || url.includes('googleusercontent')) {
+    return url.replace(/=s\d+.*/, '=s1200').replace(/=w\d+-h\d+.*/, '=s1200');
   }
   return url;
 }
 
-function loadPhotos() {
-  if (!SCRIPT_URL || SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-    showPlaceholders('childhood-grid', childhoodCaptions, 'childhood');
-    showPlaceholders('recent-grid', recentCaptions, 'recent');
-    document.getElementById('setup-banner').style.display = 'flex';
-    return;
-  }
-  document.getElementById('setup-banner').style.display = 'none';
+function getDriveFullUrl(url) {
+  if (!url) return '';
+  var id = null;
+  var m1 = url.match(/\/d\/([-\w]+)/);
+  var m2 = url.match(/[?&]id=([-\w]+)/);
+  var m3 = url.match(/open\?id=([-\w]+)/);
+  if (m1) id = m1[1];
+  else if (m2) id = m2[1];
+  else if (m3) id = m3[1];
 
+  if (id) {
+    // Use thumbnail at higher res for lightbox
+    return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w2000';
+  }
+  if (url.includes('lh3.googleusercontent') || url.includes('googleusercontent')) {
+    return url.replace(/=s\d+.*/, '=s2000').replace(/=w\d+-h\d+.*/, '=s2000');
+  }
+  return url;
+}
+
+// ── Photo loading ──
+function loadPhotos() {
   fetchSection('childhood', 'childhood-grid', 'childhood-count', childhoodCaptions, 'childhood');
   fetchSection('recent', 'recent-grid', 'recent-count', recentCaptions, 'recent');
 }
 
-// Updated to accept folder ID overrides via parameter
 function fetchSection(section, gridId, countId, captions, galleryKey, overrideFolderId) {
   var url = SCRIPT_URL + "?section=" + section + "&t=" + Date.now();
-  if (overrideFolderId) {
-    url += "&folderId=" + overrideFolderId;
-  }
+  if (overrideFolderId) url += "&folderId=" + overrideFolderId;
 
   showSkeletons(gridId, 8);
 
@@ -1408,19 +1464,19 @@ function fetchSection(section, gridId, countId, captions, galleryKey, overrideFo
         showError(gridId, section);
       }
     })
-    .catch(function(){
+    .catch(function(e){
+      console.error('Photo load error:', e);
       showCorsError(gridId);
     });
 }
 
 function showSkeletons(gridId, count) {
-  var grid = document.getElementById(gridId);
   var html = '';
   for (var i = 0; i < count; i++) {
-    var layout = layouts[i % layouts.length];
-    html += '<div class="photo-skeleton ' + layout + '"></div>';
+    var l = layouts[i % layouts.length];
+    html += '<div class="photo-skeleton ' + l + '"></div>';
   }
-  grid.innerHTML = html;
+  document.getElementById(gridId).innerHTML = html;
 }
 
 function renderGrid(gridId, countId, photos, captions, galleryKey) {
@@ -1428,7 +1484,7 @@ function renderGrid(gridId, countId, photos, captions, galleryKey) {
   var count = document.getElementById(countId);
 
   if (!photos || photos.length === 0) {
-    grid.innerHTML = '<div class="error-state"><p>No photos found in this folder yet.<br>Add photos to your Google Drive folder and they\'ll appear here automatically! 🌸</p></div>';
+    grid.innerHTML = '<div class="error-state"><p>No photos found in this folder yet.<br>Add photos to your Google Drive folder and they\'ll appear here! 🌸</p></div>';
     return;
   }
 
@@ -1436,17 +1492,17 @@ function renderGrid(gridId, countId, photos, captions, galleryKey) {
   photos.forEach(function(photo, i) {
     var layout = layouts[i % layouts.length];
     var caption = captions[i % captions.length];
-    // Apply our direct link converter so images never break
-    var directSrc = getDirectDriveLink(photo.thumb || photo.url);
-    var directFull = getDirectDriveLink(photo.url || photo.thumb);
-    
-    html += '<div class="photo-card ' + layout + '" onclick="openLb(\'' + galleryKey + '\',' + i + ')">' +
-      '<img src="' + directSrc + '" ' +
-           'data-full="' + directFull + '" ' +
-           'data-cap="' + caption + '" ' +
-           'alt="' + caption + '" ' +
+    var thumbSrc = getDriveDirectUrl(photo.thumb || photo.url);
+    var fullSrc  = getDriveFullUrl(photo.url || photo.thumb);
+
+    html += '<div class="photo-card ' + layout + '" data-gallery="' + galleryKey + '" data-idx="' + i + '" onclick="openLb(\'' + galleryKey + '\',' + i + ')">' +
+      '<img src="' + thumbSrc + '" ' +
+           'data-full="' + fullSrc + '" ' +
+           'data-cap="' + caption.replace(/"/g,"'") + '" ' +
+           'alt="' + caption.replace(/"/g,"'") + '" ' +
            'loading="lazy" ' +
-           'onerror="this.parentElement.style.display=\'none\'">' +
+           'onerror="handleImgError(this)">' +
+      '<div class="img-placeholder"><span style="font-size:1.8rem">🌸</span><span>' + caption + '</span></div>' +
       '<div class="ov"><span>' + caption + '</span></div>' +
       '</div>';
   });
@@ -1457,33 +1513,28 @@ function renderGrid(gridId, countId, photos, captions, galleryKey) {
   }
 }
 
-function showPlaceholders(gridId, captions, galleryKey) {
-  var grid = document.getElementById(gridId);
-  var html = '<div class="error-state" style="margin-bottom:1rem">' +
-    '<p>📸 Photos will load automatically from your Google Drive once you set up the Apps Script URL.</p>' +
-    '<p style="margin-top:0.5rem;font-size:0.78rem">See setup instructions below ↓</p>' +
-    '</div>';
-  grid.innerHTML = html;
+// ── FIX 2: Image error shows placeholder instead of hiding card ──
+function handleImgError(img) {
+  var card = img.closest('.photo-card');
+  if (card) card.classList.add('img-failed');
 }
 
 function showError(gridId, section) {
   document.getElementById(gridId).innerHTML =
     '<div class="error-state"><p>Couldn\'t load ' + section + ' photos.<br>' +
-    'Make sure your Google Drive folders are shared as "Anyone with link".<br>' +
-    'Also check that the Apps Script is deployed correctly.</p></div>';
+    'Make sure your Google Drive folders are shared as "Anyone with link".</p></div>';
 }
 
 function showCorsError(gridId) {
   document.getElementById(gridId).innerHTML =
     '<div class="error-state">' +
-    '<p>⚠️ The Apps Script URL needs to be deployed with <strong>"Anyone"</strong> access.<br><br>' +
-    'Go to Apps Script → Deploy → Manage Deployments → Edit → ' +
-    'Set <strong>Who has access: Anyone</strong> → Deploy</p>' +
+    '<p>⚠️ Apps Script needs <strong>"Anyone"</strong> access.<br><br>' +
+    'Apps Script → Deploy → Manage → Edit → Who has access: <strong>Anyone</strong> → Deploy</p>' +
     '</div>';
 }
 
 // ════════════════════════════════════════════════════════════
-//  LIGHTBOX
+//  FIX 2: LIGHTBOX — proper image loading with spinner
 // ════════════════════════════════════════════════════════════
 function openLb(galleryKey, idx) {
   var photos = allPhotos[galleryKey];
@@ -1491,38 +1542,85 @@ function openLb(galleryKey, idx) {
 
   var gridId = galleryKey === 'childhood' ? 'childhood-grid' :
                galleryKey === 'recent' ? 'recent-grid' : 'our-grid';
-  var imgs = document.getElementById(gridId).querySelectorAll('img');
+  var imgs = document.getElementById(gridId).querySelectorAll('.photo-card img');
   lbArr = Array.from(imgs);
   lbIdx = idx;
-  renderLb(lbIdx);
+  showLb(lbIdx);
   document.getElementById('lightbox').classList.add('on');
   document.body.style.overflow = 'hidden';
 }
 
-function renderLb(i) {
+function showLb(i) {
   var img = lbArr[i];
   if (!img) return;
-  var lbimg = document.getElementById('lb-img');
-  lbimg.style.opacity = '0';
-  
-  setTimeout(function(){
-    // Use the custom link converter to ensure it loads perfectly full screen
-    var fullSrc = img.dataset.full && img.dataset.full !== 'undefined' ? img.dataset.full : img.src;
-    lbimg.src = getDirectDriveLink(fullSrc);
-    document.getElementById('lb-caption').textContent = img.dataset.cap || '';
-    lbimg.style.transition = 'opacity 0.25s';
-    lbimg.style.opacity = '1';
-  }, 120);
+
+  var lbImg    = document.getElementById('lb-img');
+  var lbLoader = document.getElementById('lb-loader');
+  var lbError  = document.getElementById('lb-error');
+  var lbCap    = document.getElementById('lb-caption');
+
+  // Reset states
+  lbImg.style.opacity = '0';
+  lbImg.style.display = 'block';
+  lbError.classList.remove('on');
+  lbLoader.classList.add('on');
+  lbCap.textContent = img.dataset.cap || '';
+
+  // Build full URL
+  var fullUrl = img.dataset.full || img.src;
+  // Re-extract ID and use thumbnail at max res
+  var idMatch = fullUrl.match(/id=([-\w]+)/);
+  if (idMatch) {
+    fullUrl = 'https://drive.google.com/thumbnail?id=' + idMatch[1] + '&sz=w2000';
+  }
+
+  // Create new image to preload
+  var tmpImg = new Image();
+  tmpImg.onload = function() {
+    lbLoader.classList.remove('on');
+    lbImg.src = fullUrl;
+    lbImg.style.opacity = '1';
+  };
+  tmpImg.onerror = function() {
+    // Try fallback with lh3 URL from original src
+    var origSrc = img.src;
+    var origIdMatch = origSrc.match(/id=([-\w]+)/);
+    if (origIdMatch) {
+      var fallback = 'https://drive.google.com/thumbnail?id=' + origIdMatch[1] + '&sz=w1600';
+      var tmpImg2 = new Image();
+      tmpImg2.onload = function() {
+        lbLoader.classList.remove('on');
+        lbImg.src = fallback;
+        lbImg.style.opacity = '1';
+      };
+      tmpImg2.onerror = function() {
+        lbLoader.classList.remove('on');
+        lbImg.style.display = 'none';
+        lbError.classList.add('on');
+      };
+      tmpImg2.src = fallback;
+    } else {
+      lbLoader.classList.remove('on');
+      lbImg.style.display = 'none';
+      lbError.classList.add('on');
+    }
+  };
+  tmpImg.src = fullUrl;
+}
+
+function lbRetry() {
+  showLb(lbIdx);
 }
 
 function lbNav(d) {
   lbIdx = (lbIdx + d + lbArr.length) % lbArr.length;
-  renderLb(lbIdx);
+  showLb(lbIdx);
 }
 
 function closeLb() {
   document.getElementById('lightbox').classList.remove('on');
   document.body.style.overflow = '';
+  document.getElementById('lb-img').src = '';
 }
 
 document.getElementById('lightbox').addEventListener('click', function(e) {
@@ -1536,28 +1634,80 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ════════════════════════════════════════════════════════════
-//  MUSIC PLAYER TOGGLE
+//  FIX 1: MUSIC PLAYER — Robust audio handling
 // ════════════════════════════════════════════════════════════
+var audioCtx = null;
+var isPlaying = false;
+
 function toggleMusic() {
-  var audio = document.getElementById('bg-audio');
-  var btn = document.getElementById('music-btn');
-  
-  if (audio.paused) {
+  var audio  = document.getElementById('bg-audio');
+  var btn    = document.getElementById('music-btn');
+  var status = document.getElementById('music-status');
+  var bars   = document.querySelectorAll('.wbar');
+
+  if (!isPlaying) {
+    // Update status immediately
+    status.textContent = 'Loading…';
+    status.classList.add('active');
+
+    // Create AudioContext on user gesture (required by browsers)
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
     var playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.then(_ => {
+      playPromise.then(function() {
+        isPlaying = true;
         btn.innerHTML = '⏸ Pause Music';
-        btn.style.background = 'var(--rose)';
-      }).catch(error => {
-        console.error("Audio playback error:", error);
+        btn.classList.add('playing');
+        status.textContent = '♪ Now playing — Shab Tum Ho';
+        status.classList.add('active');
+        bars.forEach(function(b){ b.classList.remove('paused'); });
+      }).catch(function(err) {
+        console.warn('Audio play failed:', err);
+        // Show helpful message if autoplay blocked
+        status.textContent = 'Tap again if music doesn\'t start 💕';
+        // Try alternate approach: open in new tab
+        btn.innerHTML = '🎵 Open Song';
+        btn.onclick = function() {
+          window.open('https://drive.google.com/file/d/1XE3S5AT0bX7dz54uub_7PYNmmInqL55z/view', '_blank');
+        };
       });
     }
   } else {
     audio.pause();
+    isPlaying = false;
     btn.innerHTML = '▶ Play Music';
-    btn.style.background = 'rgba(232,84,122,0.15)';
+    btn.classList.remove('playing');
+    status.textContent = 'Paused 🎵';
+    status.classList.remove('active');
+    bars.forEach(function(b){ b.classList.add('paused'); });
   }
 }
+
+// Audio event listeners
+document.getElementById('bg-audio').addEventListener('ended', function() {
+  isPlaying = false;
+  document.getElementById('music-btn').innerHTML = '▶ Play Music';
+  document.getElementById('music-btn').classList.remove('playing');
+  document.getElementById('music-status').textContent = 'Tap to play again 🎵';
+  document.querySelectorAll('.wbar').forEach(function(b){ b.classList.add('paused'); });
+});
+
+document.getElementById('bg-audio').addEventListener('error', function(e) {
+  console.warn('Audio error:', e);
+  var btn = document.getElementById('music-btn');
+  var status = document.getElementById('music-status');
+  btn.innerHTML = '🎵 Open Song';
+  status.textContent = 'Tap to open in Google Drive';
+  btn.onclick = function() {
+    window.open('https://drive.google.com/file/d/1XE3S5AT0bX7dz54uub_7PYNmmInqL55z/view', '_blank');
+  };
+});
 
 // ════════════════════════════════════════════════════════════
 //  CANDLE INTERACTION
@@ -1619,24 +1769,18 @@ function checkPw() {
     setTimeout(function(){
       gate.innerHTML =
         '<div style="text-align:center;padding:3rem 1.5rem;position:relative;z-index:1">' +
-        '<div style="font-size:4rem;animation:hbeat 0.5s ease 6">💖</div>' +
+        '<div style="font-size:4rem">💖</div>' +
         '<h2 style="font-family:\'Great Vibes\',cursive;font-size:3rem;color:var(--rose);margin-top:1rem">You found us! 💕</h2>' +
         '<p style="color:var(--muted);font-style:italic;margin-top:0.5rem">Scroll down to see our beautiful memories together 💛</p>' +
         '</div>';
       gate.style.opacity = '1';
     }, 500);
 
-    // Show + load our gallery
     var gal = document.getElementById('our-gallery');
     gal.classList.add('open');
     if (!ourLoaded) {
       ourLoaded = true;
-      if (SCRIPT_URL && SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-        // Fetching exactly from your new Drive folder: 1wEaYwdynz2PmaN25pCectmoFigJf7V5D
-        fetchSection('us', 'our-grid', 'our-count', ourCaptions, 'us', '1wEaYwdynz2PmaN25pCectmoFigJf7V5D');
-      } else {
-        showPlaceholders('our-grid', ourCaptions, 'us');
-      }
+      fetchSection('us', 'our-grid', 'our-count', ourCaptions, 'us', '1wEaYwdynz2PmaN25pCectmoFigJf7V5D');
     }
 
     setTimeout(function(){
@@ -1661,7 +1805,6 @@ document.getElementById('pwinput').addEventListener('keydown', function(e) {
 //  LOADER
 // ════════════════════════════════════════════════════════════
 window.addEventListener('load', function() {
-  document.getElementById('setup-banner').style.display = 'none';
   loadPhotos();
   setTimeout(function(){
     var l = document.getElementById('loader');
@@ -1734,14 +1877,14 @@ window.addEventListener('scroll', function(){
   var row = document.getElementById('wrow');
   [10,18,30,22,38,26,40,28,18,34,16,36,12,28,22,16,34,24,40,18].forEach(function(h, i){
     var b = document.createElement('div');
-    b.className = 'wbar';
+    b.className = 'wbar paused';
     b.style.cssText = '--h:' + h + 'px;--d:' + (0.4+Math.random()*0.5) + 's;animation-delay:' + (i*0.06) + 's;height:' + h + 'px';
     row.appendChild(b);
   });
 })();
 
 // ════════════════════════════════════════════════════════════
-//  BACKGROUND CANVAS (animated glowing orbs)
+//  BACKGROUND CANVAS
 // ════════════════════════════════════════════════════════════
 (function(){
   var cv = document.getElementById('bg-canvas');
