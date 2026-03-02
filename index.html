@@ -66,6 +66,125 @@ body {
 #back-top.on { opacity:1; transform:translateY(0); }
 
 /* ═══════════════════════════════════════════════
+   SPLASH SCREEN
+═══════════════════════════════════════════════ */
+#splash {
+  position: fixed; inset: 0; z-index: 999999;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, #1a0810 0%, #2d0d20 50%, #180808 100%);
+  transition: opacity 1s ease, visibility 1s ease;
+}
+#splash.out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.splash-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(232,84,122,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(232,184,109,0.1) 0%, transparent 55%);
+  animation: splashpulse 4s ease-in-out infinite alternate;
+}
+@keyframes splashpulse {
+  from { opacity: 0.7; }
+  to   { opacity: 1;   }
+}
+
+.splash-petals {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.splash-petal {
+  position: absolute;
+  animation: splashfall linear infinite;
+  opacity: 0;
+  font-size: 1.2rem;
+}
+@keyframes splashfall {
+  0%   { transform: translateY(-5vh) rotate(0deg);   opacity: 0.8; }
+  50%  { transform: translateY(50vh) rotate(180deg) translateX(12px); }
+  100% { transform: translateY(105vh) rotate(360deg) translateX(-8px); opacity: 0; }
+}
+
+.splash-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+  animation: splashIn 1s ease both;
+}
+@keyframes splashIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.splash-ring {
+  width: 90px; height: 90px; border-radius: 50%;
+  border: 2px solid rgba(232,84,122,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0.5rem;
+  animation: ringpulse 2s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(232,84,122,0.2), inset 0 0 20px rgba(232,84,122,0.05);
+}
+@keyframes ringpulse {
+  0%,100% { box-shadow: 0 0 30px rgba(232,84,122,0.2), inset 0 0 20px rgba(232,84,122,0.05); transform: scale(1); }
+  50%     { box-shadow: 0 0 60px rgba(232,84,122,0.45), inset 0 0 30px rgba(232,84,122,0.1); transform: scale(1.04); }
+}
+.splash-ring-inner {
+  font-size: 2.4rem;
+  animation: spinSlow 6s linear infinite;
+}
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+.splash-to {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-top: 0.4rem;
+}
+.splash-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(4rem, 18vw, 7rem);
+  color: var(--rose);
+  text-shadow: 0 0 60px rgba(232,84,122,0.5);
+  line-height: 1;
+}
+.splash-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem; font-style: italic;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.8rem;
+}
+
+.splash-btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: #fff; border: none; border-radius: 50px;
+  padding: 1rem 2.2rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.9rem; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 40px rgba(232,84,122,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: btnpulse 2s ease-in-out infinite;
+  margin-top: 0.5rem;
+}
+@keyframes btnpulse {
+  0%,100% { box-shadow: 0 8px 40px rgba(232,84,122,0.5); }
+  50%     { box-shadow: 0 8px 60px rgba(232,84,122,0.8); }
+}
+.splash-btn:hover, .splash-btn:active {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 14px 50px rgba(232,84,122,0.7);
+}
+.splash-btn-icon { font-size: 1.1rem; }
+
+.splash-hint {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-top: 0.8rem;
+}
+
+/* ═══════════════════════════════════════════════
    LOADER
 ═══════════════════════════════════════════════ */
 #loader {
@@ -977,6 +1096,23 @@ footer {
 </head>
 <body>
 
+<!-- ══ SPLASH — user taps once → music autoplays ══ -->
+<div id="splash">
+  <div class="splash-bg"></div>
+  <div class="splash-petals" id="splash-petals"></div>
+  <div class="splash-content">
+    <div class="splash-ring"><div class="splash-ring-inner">🌸</div></div>
+    <div class="splash-to">A surprise, just for</div>
+    <div class="splash-name">Naina</div>
+    <div class="splash-date">3rd March · Turning 21 🎂</div>
+    <button class="splash-btn" id="splash-btn" onclick="enterSite()">
+      <span class="splash-btn-txt">Open Your Surprise</span>
+      <span class="splash-btn-icon">✨</span>
+    </button>
+    <div class="splash-hint">🎵 With music &amp; love inside</div>
+  </div>
+</div>
+
 <div id="loader">
   <div class="ldr-ring"></div>
   <div class="ldr-name">Naina</div>
@@ -1636,6 +1772,7 @@ var ytPlayer = null;
 var ytReady  = false;
 var ytPlaying = false;
 var ytAutoplayAttempted = false;
+var ytShouldPlay = false;
 
 // Called automatically by YouTube IFrame API when ready
 function onYouTubeIframeAPIReady() {
@@ -1666,12 +1803,17 @@ function onYouTubeIframeAPIReady() {
 
 function onYtReady(event) {
   ytReady = true;
-  // Try autoplay (works on most browsers after page interaction)
-  try {
-    event.target.setVolume(70);
-    event.target.playVideo();
-    ytAutoplayAttempted = true;
-  } catch(e) {}
+  try { event.target.setVolume(70); } catch(e) {}
+
+  // If user already tapped "Enter" before player was ready → play now
+  if (ytShouldPlay) {
+    try {
+      event.target.playVideo();
+      ytShouldPlay = false;
+      ytAutoplayAttempted = true;
+    } catch(e) {}
+    return;
+  }
   setMusicStatus('Tap ▶ to play our song 🎵', false);
 }
 
@@ -1726,14 +1868,7 @@ function toggleMusic() {
   }
 }
 
-// Autoplay on first user interaction if YouTube blocked silent autoplay
-document.addEventListener('click', function tryAutoplay() {
-  if (ytPlayer && ytReady && !ytPlaying && !ytAutoplayAttempted) {
-    ytAutoplayAttempted = true;
-    ytPlayer.playVideo();
-  }
-  document.removeEventListener('click', tryAutoplay);
-}, { once: true });
+// Music starts via enterSite() on splash tap — no extra click listener needed
 
 
 // ════════════════════════════════════════════════════════════
@@ -1829,15 +1964,69 @@ document.getElementById('pwinput').addEventListener('keydown', function(e) {
 });
 
 // ════════════════════════════════════════════════════════════
-//  LOADER
+//  SPLASH + LOADER
 // ════════════════════════════════════════════════════════════
-window.addEventListener('load', function() {
+
+// Animate petals on splash screen
+(function(){
+  var petals = ['🌸','🌺','✨','🌷','💕','🌹','💮'];
+  var container = document.getElementById('splash-petals');
+  if (!container) return;
+  for (var i = 0; i < 18; i++) {
+    var p = document.createElement('div');
+    p.className = 'splash-petal';
+    p.textContent = petals[Math.floor(Math.random() * petals.length)];
+    p.style.left = (Math.random() * 100) + 'vw';
+    p.style.fontSize = (10 + Math.random() * 14) + 'px';
+    p.style.animationDuration = (7 + Math.random() * 9) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    container.appendChild(p);
+  }
+})();
+
+// Called when she taps "Open Your Surprise"
+function enterSite() {
+  var btn = document.getElementById('splash-btn');
+  btn.innerHTML = '<span class="splash-btn-txt">Loading…</span><span class="splash-btn-icon">🌸</span>';
+  btn.style.pointerEvents = 'none';
+
+  // ★ This is the magic moment — user gesture unlocks autoplay ★
+  // Start YouTube player immediately
+  if (ytPlayer && ytReady) {
+    try {
+      ytPlayer.setVolume(70);
+      ytPlayer.playVideo();
+      ytPlaying = true;
+      ytAutoplayAttempted = true;
+    } catch(e) {}
+  } else {
+    // Player not ready yet — flag it so onYtReady fires playVideo()
+    ytAutoplayAttempted = false;
+    ytShouldPlay = true;
+  }
+
+  // Fade out splash
+  var splash = document.getElementById('splash');
+  splash.classList.add('out');
+
+  // Load photos & show loader
   loadPhotos();
   setTimeout(function(){
-    var l = document.getElementById('loader');
-    l.classList.add('out');
-    setTimeout(function(){ l.remove(); }, 900);
-  }, 2000);
+    splash.remove();
+    // Show loader briefly then fade out
+    setTimeout(function(){
+      var l = document.getElementById('loader');
+      if (l) {
+        l.classList.add('out');
+        setTimeout(function(){ if(l.parentNode) l.remove(); }, 900);
+      }
+    }, 1800);
+  }, 1000);
+}
+
+window.addEventListener('load', function() {
+  // Don't auto-dismiss loader — splash handles everything
+  // Just keep loader hidden behind splash until enterSite() is called
 });
 
 // ════════════════════════════════════════════════════════════
