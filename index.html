@@ -1121,9 +1121,18 @@ buildHeroBirthdayText();
   var cv=document.getElementById('hero-canvas');
   var ctx=cv.getContext('2d');
   var particles=[];
+  
   function resize(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;}
-  window.addEventListener('resize',resize);
+  
+  // SDE Polish: Debounce the resize event for better performance
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 250);
+  });
+  
   setTimeout(function(){resize();cv.classList.add('on');},3800);
+  
   function mkP(){
     return{
       x:Math.random()*cv.width,y:Math.random()*cv.height,
@@ -1134,6 +1143,7 @@ buildHeroBirthdayText();
     };
   }
   for(var i=0;i<60;i++) particles.push(mkP());
+  
   function drawHeart(ctx,x,y,size,alpha){
     ctx.save();ctx.globalAlpha=alpha;
     ctx.fillStyle='hsl(340,80%,75%)';
@@ -1145,6 +1155,7 @@ buildHeroBirthdayText();
     ctx.bezierCurveTo(x-size,y-size,x,y-size,x,y-size*0.3);
     ctx.fill();ctx.restore();
   }
+  
   function animate(){
     requestAnimationFrame(animate);
     ctx.clearRect(0,0,cv.width,cv.height);
