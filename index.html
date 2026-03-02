@@ -1009,7 +1009,7 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   <div class="fin-main fade-up">Happy Birthday</div>
   <div class="fin-name fade-up">Naina 🌸</div>
   <p class="fin-msg fade-up">You are loved beyond measure,<br>more than words can ever say.<br>This is your year — own every second of it. 🥂</p>
-  <div class="fin-hearts fade-up">🌸 💖 🌸</div>
+  <div class="fin-hearts fade-up">💝 ✨ 💗</div>
 </section>
 
 <footer>Made with infinite love &amp; care · Just for Naina · 3rd March 2005 · Happy 21st Birthday 🌸</footer>
@@ -1142,16 +1142,17 @@ buildHeroBirthdayText();
 })();
 
 // ═══════════════════════════════════════════════════════════
-//  HERO — Tap heart burst (FIXED)
+//  HERO — Tap heart burst (Ultimate Spread Fix)
 // ═══════════════════════════════════════════════════════════
 var tapCount=0;
 function heartBurst(e){
   tapCount++;
   var btn=document.getElementById('tap-btn');
   var hearts=['💗','💖','💕','🌸','✨','🌹','💝','🌺'];
-  var count=6+Math.floor(tapCount/3);
   
-  // 1. Get the exact center of the button on the screen
+  // Increased the number of hearts per tap for a bigger explosion!
+  var count=10 + Math.floor(tapCount/2); 
+  
   var rect = btn.getBoundingClientRect();
   var originX = rect.left + rect.width / 2;
   var originY = rect.top + rect.height / 2;
@@ -1159,20 +1160,32 @@ function heartBurst(e){
   for(var i=0;i<count;i++){
     var h=document.createElement('div');
     h.className='heart-burst';
-    var angle=Math.random()*Math.PI*2;
-    var dist=40+Math.random()*80;
     
-    // 2. Attach them with fixed positioning so they fly freely
-    h.style.cssText='position:fixed; z-index:99999; left:'+originX+'px; top:'+originY+'px; --bx:'+Math.cos(angle)*dist+'px; --by:'+Math.sin(angle)*dist+'px; animation-delay:'+(i*0.05)+'s; font-size:'+(0.9+Math.random()*0.8)+'rem;';
+    // Calculate a full 360-degree circle
+    var angle=Math.random()*Math.PI*2;
+    // Increased the distance so they fly much further outward!
+    var dist=60+Math.random()*120; 
+    
+    // Safely set CSS variables so ALL mobile browsers read them correctly
+    h.style.setProperty('--bx', (Math.cos(angle) * dist) + 'px');
+    h.style.setProperty('--by', (Math.sin(angle) * dist) + 'px');
+    
+    // Force them to fly freely over everything
+    h.style.position = 'fixed';
+    h.style.left = originX + 'px';
+    h.style.top = originY + 'px';
+    h.style.zIndex = '999999';
+    h.style.animationDelay = (i * 0.02) + 's'; // Stagger them slightly
+    h.style.fontSize = (1.2 + Math.random() * 0.8) + 'rem';
     
     h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
-    
-    // Append to the body instead of the wrapper
     document.body.appendChild(h);
     
-    setTimeout(function(el){return function(){if(el.parentNode)el.parentNode.removeChild(el);}}(h),900);
+    // Clean up the emoji after the animation finishes
+    setTimeout(function(el){return function(){if(el.parentNode)el.parentNode.removeChild(el);}}(h), 1000);
   }
   
+  // Button bounce effect
   btn.style.transform='scale(0.8)';
   setTimeout(function(){btn.style.transform='';},150);
   
@@ -1182,7 +1195,6 @@ function heartBurst(e){
   }
   if(tapCount===10) confetti();
 }
-
 // ═══════════════════════════════════════════════════════════
 //  SPLASH
 // ═══════════════════════════════════════════════════════════
