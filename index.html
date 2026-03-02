@@ -1009,7 +1009,7 @@ footer{background:var(--ink);border-top:1px solid rgba(255,255,255,0.04);text-al
   <div class="fin-main fade-up">Happy Birthday</div>
   <div class="fin-name fade-up">Naina 🌸</div>
   <p class="fin-msg fade-up">You are loved beyond measure,<br>more than words can ever say.<br>This is your year — own every second of it. 🥂</p>
-  <div class="fin-hearts fade-up">🌹 💖 🌹</div>
+  <div class="fin-hearts fade-up">🌸 💖 🌸</div>
 </section>
 
 <footer>Made with infinite love &amp; care · Just for Naina · 3rd March 2005 · Happy 21st Birthday 🌸</footer>
@@ -1142,29 +1142,42 @@ buildHeroBirthdayText();
 })();
 
 // ═══════════════════════════════════════════════════════════
-//  HERO — Tap heart burst
+//  HERO — Tap heart burst (FIXED)
 // ═══════════════════════════════════════════════════════════
 var tapCount=0;
 function heartBurst(e){
   tapCount++;
   var btn=document.getElementById('tap-btn');
-  var wrap=document.getElementById('hero-tap');
   var hearts=['💗','💖','💕','🌸','✨','🌹','💝','🌺'];
   var count=6+Math.floor(tapCount/3);
+  
+  // 1. Get the exact center of the button on the screen
+  var rect = btn.getBoundingClientRect();
+  var originX = rect.left + rect.width / 2;
+  var originY = rect.top + rect.height / 2;
+  
   for(var i=0;i<count;i++){
     var h=document.createElement('div');
     h.className='heart-burst';
     var angle=Math.random()*Math.PI*2;
     var dist=40+Math.random()*80;
-    h.style.cssText='--bx:'+Math.cos(angle)*dist+'px;--by:'+Math.sin(angle)*dist+'px;left:50%;top:0;animation-delay:'+(i*0.05)+'s;font-size:'+(0.9+Math.random()*0.8)+'rem;';
+    
+    // 2. Attach them with fixed positioning so they fly freely
+    h.style.cssText='position:fixed; z-index:99999; left:'+originX+'px; top:'+originY+'px; --bx:'+Math.cos(angle)*dist+'px; --by:'+Math.sin(angle)*dist+'px; animation-delay:'+(i*0.05)+'s; font-size:'+(0.9+Math.random()*0.8)+'rem;';
+    
     h.textContent=hearts[Math.floor(Math.random()*hearts.length)];
-    wrap.appendChild(h);
+    
+    // Append to the body instead of the wrapper
+    document.body.appendChild(h);
+    
     setTimeout(function(el){return function(){if(el.parentNode)el.parentNode.removeChild(el);}}(h),900);
   }
+  
   btn.style.transform='scale(0.8)';
   setTimeout(function(){btn.style.transform='';},150);
+  
   if(tapCount===5){
-    var hint=wrap.querySelector('.tap-hint');
+    var hint=document.querySelector('.tap-hint');
     if(hint) hint.textContent='you\'re so loved, Naina 💕';
   }
   if(tapCount===10) confetti();
