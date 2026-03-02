@@ -1208,7 +1208,12 @@ footer {
 
 <div class="divider">✦ ✦ ✦</div>
 
-<!-- ── FIX 1: Music section with working audio ── -->
+<!-- ── YouTube Music Section ── -->
+<!-- Hidden YouTube iframe for background autoplay -->
+<div id="yt-player-wrap" style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;pointer-events:none;z-index:-1;overflow:hidden;">
+  <div id="yt-player"></div>
+</div>
+
 <section id="music">
   <div class="fade-up" style="text-align:center">
     <div class="s-eyebrow" style="color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0);background:none">Playing for you</div>
@@ -1220,9 +1225,9 @@ footer {
     <div class="song-name">Shab Tum Ho</div>
     <div class="song-by">Darshan Raval · Our Forever Song</div>
     <button class="play-music-btn" id="music-btn" onclick="toggleMusic()">▶ Play Music</button>
-    <div class="music-status" id="music-status">Tap to play our song 🎵</div>
+    <div class="music-status" id="music-status">Loading song… 🎵</div>
   </div>
-  <p class="music-note fade-up">🎧 Play it while you scroll through our memories below</p>
+  <p class="music-note fade-up">🎧 Playing softly as you scroll through our memories 💕</p>
 </section>
 
 <div class="divider">✦ ✦ ✦</div>
@@ -1345,17 +1350,8 @@ footer {
 
 <footer>Made with infinite love &amp; care · Just for Naina · 3rd March 2005 · Happy 21st Birthday 🌸</footer>
 
-<!-- ══════════════════════════════════════════════
-     FIX 1: Audio element — Drive file ID approach
-     The direct uc?export=view link is used instead of export=download
-     which avoids the redirect/CORS issue browsers block
-══════════════════════════════════════════════ -->
-<audio id="bg-audio" preload="none" loop crossorigin="anonymous">
-  <!-- Primary: direct streaming link -->
-  <source src="https://drive.google.com/uc?export=view&id=1XE3S5AT0bX7dz54uub_7PYNmmInqL55z" type="audio/mpeg">
-  <!-- Fallback: alternate format attempt -->
-  <source src="https://docs.google.com/uc?export=open&id=1XE3S5AT0bX7dz54uub_7PYNmmInqL55z" type="audio/mpeg">
-</audio>
+<!-- YouTube IFrame API loaded async -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
 // ════════════════════════════════════════════════════════════
@@ -1634,80 +1630,111 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ════════════════════════════════════════════════════════════
-//  FIX 1: MUSIC PLAYER — Robust audio handling
+//  MUSIC — YouTube IFrame API (autoplay on load)
 // ════════════════════════════════════════════════════════════
-var audioCtx = null;
-var isPlaying = false;
+var ytPlayer = null;
+var ytReady  = false;
+var ytPlaying = false;
+var ytAutoplayAttempted = false;
 
-function toggleMusic() {
-  var audio  = document.getElementById('bg-audio');
+// Called automatically by YouTube IFrame API when ready
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('yt-player', {
+    height: '1',
+    width:  '1',
+    videoId: 'DLxgg8HwhDg',
+    playerVars: {
+      autoplay:       1,
+      loop:           1,
+      playlist:       'DLxgg8HwhDg',
+      controls:       0,
+      disablekb:      1,
+      fs:             0,
+      iv_load_policy: 3,
+      modestbranding: 1,
+      rel:            0,
+      mute:           0,
+      origin:         window.location.origin || '*'
+    },
+    events: {
+      onReady:       onYtReady,
+      onStateChange: onYtStateChange,
+      onError:       onYtError
+    }
+  });
+}
+
+function onYtReady(event) {
+  ytReady = true;
+  // Try autoplay (works on most browsers after page interaction)
+  try {
+    event.target.setVolume(70);
+    event.target.playVideo();
+    ytAutoplayAttempted = true;
+  } catch(e) {}
+  setMusicStatus('Tap ▶ to play our song 🎵', false);
+}
+
+function onYtStateChange(event) {
+  var bars   = document.querySelectorAll('.wbar');
   var btn    = document.getElementById('music-btn');
   var status = document.getElementById('music-status');
-  var bars   = document.querySelectorAll('.wbar');
 
-  if (!isPlaying) {
-    // Update status immediately
-    status.textContent = 'Loading…';
-    status.classList.add('active');
-
-    // Create AudioContext on user gesture (required by browsers)
-    if (!audioCtx) {
-      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-    }
-    if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-
-    var playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.then(function() {
-        isPlaying = true;
-        btn.innerHTML = '⏸ Pause Music';
-        btn.classList.add('playing');
-        status.textContent = '♪ Now playing — Shab Tum Ho';
-        status.classList.add('active');
-        bars.forEach(function(b){ b.classList.remove('paused'); });
-      }).catch(function(err) {
-        console.warn('Audio play failed:', err);
-        // Show helpful message if autoplay blocked
-        status.textContent = 'Tap again if music doesn\'t start 💕';
-        // Try alternate approach: open in new tab
-        btn.innerHTML = '🎵 Open Song';
-        btn.onclick = function() {
-          window.open('https://drive.google.com/file/d/1XE3S5AT0bX7dz54uub_7PYNmmInqL55z/view', '_blank');
-        };
-      });
-    }
-  } else {
-    audio.pause();
-    isPlaying = false;
+  if (event.data === YT.PlayerState.PLAYING) {
+    ytPlaying = true;
+    btn.innerHTML = '⏸ Pause Music';
+    btn.classList.add('playing');
+    setMusicStatus('♪ Now playing — Shab Tum Ho', true);
+    bars.forEach(function(b){ b.classList.remove('paused'); });
+  } else if (event.data === YT.PlayerState.PAUSED ||
+             event.data === YT.PlayerState.ENDED) {
+    ytPlaying = false;
     btn.innerHTML = '▶ Play Music';
     btn.classList.remove('playing');
-    status.textContent = 'Paused 🎵';
-    status.classList.remove('active');
+    setMusicStatus('Tap ▶ to resume 🎵', false);
     bars.forEach(function(b){ b.classList.add('paused'); });
+  } else if (event.data === YT.PlayerState.BUFFERING) {
+    setMusicStatus('Buffering… 🎵', false);
   }
 }
 
-// Audio event listeners
-document.getElementById('bg-audio').addEventListener('ended', function() {
-  isPlaying = false;
-  document.getElementById('music-btn').innerHTML = '▶ Play Music';
-  document.getElementById('music-btn').classList.remove('playing');
-  document.getElementById('music-status').textContent = 'Tap to play again 🎵';
-  document.querySelectorAll('.wbar').forEach(function(b){ b.classList.add('paused'); });
-});
-
-document.getElementById('bg-audio').addEventListener('error', function(e) {
-  console.warn('Audio error:', e);
+function onYtError(event) {
+  setMusicStatus('Could not load song — try refreshing 💕', false);
   var btn = document.getElementById('music-btn');
-  var status = document.getElementById('music-status');
-  btn.innerHTML = '🎵 Open Song';
-  status.textContent = 'Tap to open in Google Drive';
-  btn.onclick = function() {
-    window.open('https://drive.google.com/file/d/1XE3S5AT0bX7dz54uub_7PYNmmInqL55z/view', '_blank');
+  btn.innerHTML = '🎵 Open on YouTube';
+  btn.onclick = function(){
+    window.open('https://youtu.be/DLxgg8HwhDg', '_blank');
   };
-});
+}
+
+function setMusicStatus(txt, active) {
+  var s = document.getElementById('music-status');
+  if (!s) return;
+  s.textContent = txt;
+  s.classList.toggle('active', active);
+}
+
+function toggleMusic() {
+  if (!ytPlayer || !ytReady) {
+    setMusicStatus('Still loading, please wait… ⏳', false);
+    return;
+  }
+  if (ytPlaying) {
+    ytPlayer.pauseVideo();
+  } else {
+    ytPlayer.playVideo();
+  }
+}
+
+// Autoplay on first user interaction if YouTube blocked silent autoplay
+document.addEventListener('click', function tryAutoplay() {
+  if (ytPlayer && ytReady && !ytPlaying && !ytAutoplayAttempted) {
+    ytAutoplayAttempted = true;
+    ytPlayer.playVideo();
+  }
+  document.removeEventListener('click', tryAutoplay);
+}, { once: true });
+
 
 // ════════════════════════════════════════════════════════════
 //  CANDLE INTERACTION
